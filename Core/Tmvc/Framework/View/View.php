@@ -13,7 +13,7 @@ namespace Tmvc\Framework\View;
 use Tmvc\Framework\DataObject;
 use Tmvc\Framework\Tools\ObjectManager;
 
-class ViewLoader
+class View
 {
 
     private $layout;
@@ -41,13 +41,13 @@ class ViewLoader
         if (!$data) {
             $data = $this->block;
         }
-        return ObjectManager::create(ViewLoader::class)->loadView($name, $data);
+        return ObjectManager::create(self::class)->loadView($name, $data)->render();
     }
 
     /**
      * @return string
      */
-    public function __toString()
+    public function render()
     {
         $viewRender = \Closure::bind(function ($block) {
             ob_start();

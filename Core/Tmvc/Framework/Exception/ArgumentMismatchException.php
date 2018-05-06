@@ -10,7 +10,7 @@
 namespace Tmvc\Framework\Exception;
 
 
-class TmvcException extends \Exception
+class ArgumentMismatchException extends TmvcException
 {
 
 }

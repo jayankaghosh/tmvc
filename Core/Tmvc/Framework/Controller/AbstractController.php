@@ -9,27 +9,33 @@
 
 namespace Tmvc\Framework\Controller;
 
+use Tmvc\Framework\App\Request;
+use Tmvc\Framework\App\Response;
 use Tmvc\Framework\Tools\ObjectManager;
-use Tmvc\Framework\View\ViewLoader;
+use Tmvc\Framework\View\View;
 
 abstract class AbstractController
 {
     /**
-     * @var ViewLoader
+     * @var View
      */
     private $view;
 
     public function __construct()
     {
-        $this->view = ObjectManager::create(ViewLoader::class);
+        $this->view = ObjectManager::create(View::class);
     }
 
     /**
-     * @return ViewLoader
+     * @return View
      */
     public function getView() {
         return $this->view;
     }
 
-    abstract public function execute();
+    /**
+     * @param Request $request
+     * @return View|Response
+     */
+    abstract public function execute(Request $request);
 }
