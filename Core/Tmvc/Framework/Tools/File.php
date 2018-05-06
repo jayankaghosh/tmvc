@@ -74,7 +74,8 @@ class File
      */
     public function read($nl2br = false) {
         if ($this->handle) {
-            if ($read = fread($this->handle, filesize($this->file))) {
+            $filesize = filesize($this->file);
+            if ($filesize && $read = fread($this->handle, $filesize)) {
                 if ($nl2br == true) {
                     fclose($this->handle);
                     return nl2br($read);

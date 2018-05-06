@@ -9,8 +9,27 @@
 
 namespace Tmvc\Framework\Controller;
 
+use Tmvc\Framework\Tools\ObjectManager;
+use Tmvc\Framework\View\ViewLoader;
 
 abstract class AbstractController
 {
+    /**
+     * @var ViewLoader
+     */
+    private $view;
+
+    public function __construct()
+    {
+        $this->view = ObjectManager::create(ViewLoader::class);
+    }
+
+    /**
+     * @return ViewLoader
+     */
+    public function getView() {
+        return $this->view;
+    }
+
     abstract public function execute();
 }

@@ -17,7 +17,7 @@ class Router {
         if ($obj instanceof \Tmvc\Framework\Controller\AbstractController) {
             $obj->execute();
         } else {
-            throw new \Tmvc\Framework\Exception\TmvcException("Controller Action Not found");
+            throw new \Tmvc\Framework\Exception\EntityNotFoundException("Controller Action Not found");
         }
     }
 }

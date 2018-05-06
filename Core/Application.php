@@ -28,6 +28,11 @@ class Application {
         /* Register the autoloader */
         $this->autoloader->register();
 
+        /* Set MAX_OBJECT_CREATION_LIMIT */
+        /* @var \Tmvc\Framework\Tools\AppEnv $appEnv */
+        $appEnv = \Tmvc\Framework\Tools\ObjectManager::get(\Tmvc\Framework\Tools\AppEnv::class);
+        \Tmvc\Framework\Tools\VarBucket::write(\Tmvc\Framework\Tools\ObjectManager::MAX_OBJECT_LIMIT_KEY, $appEnv->read('max_object_limit'));
+
         /* Make DB Connection */
         $db = \Tmvc\Framework\Tools\ObjectManager::get(\Tmvc\Framework\Model\Resource\Db::class);
         \Tmvc\Framework\Tools\VarBucket::write(\Tmvc\Framework\Model\Resource\Db::DB_CONNECTION_VAR_KEY, $db);
