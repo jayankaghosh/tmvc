@@ -1,0 +1,13 @@
+{
+  "app": {
+    "name": "TMVC",
+    "version": "0.0.1"
+  },
+  "db": {
+    "servername": [SERVERNAME],
+    "username": [USERNAME],
+    "password": [PASSWORD],
+    "dbname": [DB_NAME]
+  },
+  "max_object_limit": [MAXIMUM_NUMBER_OF_OBJECTS_THAT_CAN_BE_CREATED_FOR_A_CLASS]
+}
