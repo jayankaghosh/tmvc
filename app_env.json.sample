@@ -1,7 +1,8 @@
 {
   "app": {
     "name": "TMVC",
-    "version": "0.0.1"
+    "version": "0.0.1",
+    "mode": [developer|production]
   },
   "db": {
     "servername": [SERVERNAME],

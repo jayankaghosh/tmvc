@@ -28,6 +28,21 @@ class Application {
         /* Register the autoloader */
         $this->autoloader->register();
 
+        /* Set the app mode */
+        $mode = \Tmvc\Framework\Tools\ObjectManager::get(\Tmvc\Framework\App\Mode::class)->getMode();
+        switch ($mode) {
+            case \Tmvc\Framework\App\Mode::MODE_DEVELOPER:
+                error_reporting(E_ALL);
+                ini_set('display_errors', true);
+                ini_set('display_startup_errors', true);
+                break;
+            case \Tmvc\Framework\App\Mode::MODE_PRODUCTION:
+                error_reporting(0);
+                ini_set('display_errors', false);
+                ini_set('display_startup_errors', false);
+                break;
+        }
+
         /* Set MAX_OBJECT_CREATION_LIMIT */
         /* @var \Tmvc\Framework\Tools\AppEnv $appEnv */
         $appEnv = \Tmvc\Framework\Tools\ObjectManager::get(\Tmvc\Framework\Tools\AppEnv::class);
