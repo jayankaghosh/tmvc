@@ -9,5 +9,9 @@
     "password": [PASSWORD],
     "dbname": [DB_NAME]
   },
-  "max_object_limit": [MAXIMUM_NUMBER_OF_OBJECTS_THAT_CAN_BE_CREATED_FOR_A_CLASS]
+  "max_object_limit": [MAXIMUM_NUMBER_OF_OBJECTS_THAT_CAN_BE_CREATED_FOR_A_CLASS],
+  "default_pages": {
+      "index": [ROUTE_TO_INDEX_PAGE],
+      "404": [ROUTE_TO_404_PAGE]
+  }
 }

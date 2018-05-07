@@ -32,7 +32,7 @@ class Save
                 if ($column === $this->id) { // ignore ID field
                     continue;
                 }
-                $updateEntries[] = "$column = $value";
+                $updateEntries[] = "$column = '".addslashes($value)."'";
             }
             return "UPDATE `".$this->tableName."` SET ".implode(", ", $updateEntries)." WHERE ".$this->id." = ".$this->data[$this->id];
         } else {

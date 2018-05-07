@@ -12,6 +12,7 @@ namespace Tmvc\Framework\Model;
 use Tmvc\Framework\DataObject;
 use Tmvc\Framework\Exception\TmvcException;
 use Tmvc\Framework\Model\Resource\Db;
+use Tmvc\Framework\Model\Resource\Delete;
 use Tmvc\Framework\Model\Resource\Save;
 use Tmvc\Framework\Model\Resource\Select;
 use Tmvc\Framework\Tools\ObjectManager;
@@ -23,6 +24,8 @@ class AbstractModel extends DataObject
     protected $tableName = null;
 
     protected $indexField = "id";
+
+    private $origData;
 
     /**
      * @var Db
@@ -43,6 +46,21 @@ class AbstractModel extends DataObject
         $this->select = ObjectManager::create(Select::class, [$this->tableName]);
     }
 
+    public function getId() {
+        return $this->getData($this->indexField);
+    }
+
+    public function getOrigData($key = null) {
+        if ($this->origData instanceof DataObject) {
+            if ($key) {
+                return $this->origData->getData($key);
+            } else {
+                return $this->origData->getData();
+            }
+        }
+        return [];
+    }
+
     /**
      * @param string $value
      * @param null|string $field
@@ -54,6 +72,7 @@ class AbstractModel extends DataObject
         }
         $this->getSelect()->addFieldToFilter($field, $value)->addLimit(1);
         $result = $this->getConnection()->query($this->getSelect())->getFirstItem();
+        $this->origData = $result;
         return $this->setData($result->getData());
     }
 
@@ -67,7 +86,19 @@ class AbstractModel extends DataObject
             $this->indexField
         ]);
         $result = $this->getConnection()->query($query);
-        return $this->setData($this->indexField, $result->getLastInsertId());
+        return $this->getId() ? $this : $this->setData($this->indexField, $result->getLastInsertId());
+    }
+
+    public function delete() {
+        if ($this->getData($this->indexField)) {
+            $query = ObjectManager::create(Delete::class, [
+                $this->tableName,
+                $this->indexField,
+                $this->getData($this->indexField)
+            ]);
+            $result = $this->getConnection()->query($query);
+        }
+        return $this;
     }
 
     /**

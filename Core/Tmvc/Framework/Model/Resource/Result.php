@@ -51,14 +51,14 @@ class Result
      * @return DataObject
      */
     public function getFirstItem() {
-        return $this->getItems()[0];
+        return count($this->getItems()) ? $this->getItems()[0]: ObjectManager::create(DataObject::class);
     }
 
     /**
      * @return DataObject
      */
     public function getLastItem() {
-        return end($this->getItems());
+        return count($this->getItems()) ? end($this->getItems()): ObjectManager::create(DataObject::class);
     }
 
     /**

@@ -41,7 +41,7 @@ class Select
     public function addFieldToFilter($field, $value = null) {
         if (is_string($field) && !$value) {
             $this->conditions[] = $field;
-        } else if (is_string($field) && is_string($value)){
+        } else if (is_string($field) && !is_array($value)){
             $this->conditions[] = "($field = $value)";
         } else if (is_string($field) && is_array($value)) {
             $condition = [];
@@ -49,7 +49,7 @@ class Select
                 $condition[] = "($field $conditionType $conditionValue)";
             }
             $this->conditions[] = "(".implode(" OR ", $condition).")";
-        } else if (is_array($field) && is_string($value)) {
+        } else if (is_array($field) && !is_array($value)) {
             $condition = [];
             foreach ($field as $item) {
                 $condition[] = "($item = $value)";
