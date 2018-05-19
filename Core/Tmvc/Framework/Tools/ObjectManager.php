@@ -40,6 +40,7 @@ class ObjectManager
 
         if (self::getMaxObjectLimit() <= 0 || self::$objects[$class] < self::getMaxObjectLimit()) {
             self::$objects[$class]++;
+            $arguments = ReflectionClass::parseClass($class, $arguments);
             return new $class(...$arguments);
         } else {
             throw new TmvcException(self::$objects[$class] . " objects already created for class $class");

@@ -21,9 +21,11 @@ abstract class AbstractController
      */
     private $view;
 
-    public function __construct()
+    public function __construct(
+        View $view
+    )
     {
-        $this->view = ObjectManager::create(View::class);
+        $this->view = $view;
     }
 
     /**

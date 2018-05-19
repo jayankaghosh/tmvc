@@ -30,7 +30,7 @@ class Router {
             $className = implode("\\", explode(" ", ucwords(implode(" ", $route))));
             /* @var \Tmvc\Framework\Controller\AbstractController $obj */
             try {
-                $obj = new $className();
+                $obj = \Tmvc\Framework\Tools\ObjectManager::get($className);
             } catch (\Exception $exception) {
                 throw new \Tmvc\Framework\Exception\EntityNotFoundException("Controller Action Not found");
             }
