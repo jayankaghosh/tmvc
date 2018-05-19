@@ -21,10 +21,11 @@ class AppEnv
 
     private $env;
 
-    public function __construct()
+    public function __construct(
+        File $file
+    )
     {
         if (!VarBucket::read(self::APP_ENV_VAR_KEY)) {
-            $file = ObjectManager::create(File::class);
             $file = $file->load($this->fileName);
             if (!$file instanceof File) {
                 throw new TmvcException($this->fileName." not found");

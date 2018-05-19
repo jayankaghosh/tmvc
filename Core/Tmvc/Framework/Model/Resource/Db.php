@@ -22,11 +22,28 @@ class Db
     const DB_CONNECTION_VAR_KEY = "_tmvc_db_connection_var_key";
 
     protected $mysqlObj;
+    /**
+     * @var AppEnv
+     */
+    private $appEnv;
+    /**
+     * @var DataObject
+     */
+    private $dataObject;
 
-    public function __construct()
+    /**
+     * Db constructor.
+     * @param AppEnv $appEnv
+     * @param DataObject $dataObject
+     */
+    public function __construct(
+        AppEnv $appEnv,
+        DataObject $dataObject
+    )
     {
         /* @var \Tmvc\Framework\Tools\AppEnv $appEnv */
-        $appEnv = ObjectManager::get(AppEnv::class);
+        $this->appEnv = $appEnv;
+        $this->dataObject = $dataObject;
         $this->mysqlObj = new \mysqli(
             $appEnv->read('db.servername'),
             $appEnv->read('db.username'),
@@ -49,7 +66,7 @@ class Db
         /* @var \Tmvc\Framework\Model\Resource\Result $result */
         $result = $this->getConnection()->query($query);
         if ($result) {
-            $result = ObjectManager::create(DataObject::class)->setData([
+            $result = $this->dataObject->setData([
                 'result' => $result
             ]);
             if ($this->getConnection()->insert_id > 0) {
