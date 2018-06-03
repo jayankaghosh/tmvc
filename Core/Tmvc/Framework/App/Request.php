@@ -12,6 +12,9 @@ namespace Tmvc\Framework\App;
 
 class Request
 {
+
+    const PLACEHOLDER = "index";
+
     /**
      * Request Methods
      */
@@ -165,5 +168,24 @@ class Request
     {
         $this->method = $method;
         return $this;
+    }
+
+    public function getFullRoute() {
+        return $this->getModule()."/".$this->getController()."/".$this->getAction();
+    }
+
+    /**
+     * @param string $route
+     * @param string $method
+     * @return bool
+     */
+    public function match($route, $method = self::METHOD_GET) {
+        $route = array_filter(explode("/", $route));
+        if (count($route) < 3) {
+            $route = array_pad($route, 3, self::PLACEHOLDER);
+        } else if ($route > 3) {
+            $route = array_slice($route, 3);
+        }
+        return ((implode("/", $route) === $this->getFullRoute()) && ($method === $this->getMethod()));
     }
 }

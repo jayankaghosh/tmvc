@@ -36,7 +36,11 @@ class File
      */
     public function load($file_url) {
         $this->file = $file_url;
-        if (file_exists($file_url) && $this->handle = fopen($file_url, 'c+')) {
+        $dirname = dirname($file_url);
+        if (!is_dir($dirname)) {
+            mkdir($dirname, 0755, true);
+        }
+        if ($this->handle = fopen($file_url, 'c+')) {
             return $this;
         } else {
             return false;

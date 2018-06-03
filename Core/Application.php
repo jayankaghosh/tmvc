@@ -28,6 +28,11 @@ class Application {
         /* Register the autoloader */
         $this->autoloader->register();
 
+        /* Read all module config files */
+        /* @var \Tmvc\Framework\ConfigReader $configReader */
+        $configReader = \Tmvc\Framework\Tools\ObjectManager::get(\Tmvc\Framework\ConfigReader::class);
+        $configReader->read();
+
         /* Set the app mode */
         $mode = \Tmvc\Framework\Tools\ObjectManager::get(\Tmvc\Framework\App\Mode::class)->getMode();
         switch ($mode) {
@@ -84,7 +89,7 @@ class Application {
             $queryParameters = array_filter(explode("/", $queryString));
             $params = $_GET;
             if (count($queryParameters) < 3) {
-                $queryParameters = array_pad($queryParameters, 3, "index");
+                $queryParameters = array_pad($queryParameters, 3, \Tmvc\Framework\App\Request::PLACEHOLDER);
             } else if ($queryParameters > 3) {
                 $additionalParams = array_slice($queryParameters, 3);
                 $index = 0;
