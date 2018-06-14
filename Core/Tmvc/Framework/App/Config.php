@@ -11,6 +11,7 @@ namespace Tmvc\Framework\App;
 
 
 use Tmvc\Framework\Event\Manager as EventManager;
+use Tmvc\Framework\Tools\ObjectManager;
 
 class Config
 {
@@ -47,5 +48,13 @@ class Config
      */
     public function addObserver($eventName, $className) {
         $this->eventManager->addObserver($eventName, $className);
+    }
+
+    /**
+     * @param string $sourceClass
+     * @param string $preferredClass
+     */
+    public function addClassPreference($sourceClass, $preferredClass) {
+        ObjectManager::addClassPreference($sourceClass, $preferredClass);
     }
 }

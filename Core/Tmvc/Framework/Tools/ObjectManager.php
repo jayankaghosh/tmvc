@@ -24,6 +24,8 @@ class ObjectManager
 
     private static $objects = [];
 
+    private static $_preferences = [];
+
     public static function get($class, $arguments = []) {
         $key = self::OBJECT_BUCKET_KEY_PREFIX.strtolower(str_replace("\\", "_", $class));
         if (!VarBucket::read($key)) {
@@ -34,6 +36,11 @@ class ObjectManager
     }
 
     public static function create($class, $arguments = []) {
+
+        if (isset(self::$_preferences[$class])) {
+            $class = self::$_preferences[$class];
+        }
+
         if (!isset(self::$objects[$class])) {
             self::$objects[$class] = 0;
         }
@@ -52,5 +59,13 @@ class ObjectManager
             self::$maxObjectLimit = intval(VarBucket::read(self::MAX_OBJECT_LIMIT_KEY));
         }
         return self::$maxObjectLimit;
+    }
+
+    /**
+     * @param string $sourceClass
+     * @param string $preferredClass
+     */
+    public static function addClassPreference($sourceClass, $preferredClass) {
+        self::$_preferences[$sourceClass] = $preferredClass;
     }
 }
