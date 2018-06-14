@@ -49,7 +49,7 @@ class Cache
     }
 
     public function delete($cacheKey) {
-
+        $this->file->load($this->_formCacheFilePath($cacheKey))->delete();
     }
 
     private function _formCacheFilePath($cacheKey) {
