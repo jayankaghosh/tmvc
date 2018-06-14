@@ -36,8 +36,16 @@ class Cache
      * @return string|null
      */
     public function get($cacheKey) {
-        $file = $this->file->load($this->_formCacheFilePath($cacheKey));
+        $file = $this->file->load($this->getCacheFileName($cacheKey));
         return $file ? $file->read() : null;
+    }
+
+    /**
+     * @param string $cacheKey
+     * @return string
+     */
+    public function getCacheFileName($cacheKey) {
+        return $this->_formCacheFilePath($cacheKey);
     }
 
     /**
