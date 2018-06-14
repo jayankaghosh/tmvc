@@ -72,7 +72,7 @@ class Db
             if ($this->getConnection()->insert_id > 0) {
                 $result->setData("last_insert_id", $this->getConnection()->insert_id);
             }
-            $result = ObjectManager::create(Result::class, [$result]);
+            $result = ObjectManager::create(Result::class, ["result" => $result]);
         } else {
             throw new TmvcException("MYSQL ERROR: ".$this->getConnection()->error);
         }

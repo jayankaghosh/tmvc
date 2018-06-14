@@ -17,9 +17,13 @@ use Tmvc\Framework\Model\Resource\Save;
 use Tmvc\Framework\Model\Resource\Select;
 use Tmvc\Framework\Tools\ObjectManager;
 use Tmvc\Framework\Tools\VarBucket;
+use Tmvc\Framework\Event\Manager as EventManager;
 
 class AbstractModel extends DataObject
 {
+
+    const EVENT_PREFIX = "abstract_model";
+
     /* To be overridden by child classes */
     protected $tableName = null;
 
@@ -38,16 +42,25 @@ class AbstractModel extends DataObject
     protected $select;
 
     /**
+     * @var EventManager
+     */
+    protected $eventManager;
+
+    /**
      * AbstractModel constructor.
+     * @param EventManager $eventManager
      * @throws TmvcException
      */
-    public function __construct()
+    public function __construct(
+        EventManager $eventManager
+    )
     {
         if (!$this->tableName || !$this->indexField) {
             throw new TmvcException("Table name or Index field are not defined. Please redefine these variables in your Model \"".get_called_class()."\".");
         }
         $this->dbConn = VarBucket::read(Db::DB_CONNECTION_VAR_KEY);
-        $this->select = ObjectManager::create(Select::class, [$this->tableName]);
+        $this->select = ObjectManager::create(Select::class, ["tableName" => $this->tableName]);
+        $this->eventManager = $eventManager;
     }
 
     public function getId() {
@@ -75,10 +88,31 @@ class AbstractModel extends DataObject
         if (!$field) {
             $field = $this->indexField;
         }
+
+        $eventParameters = $this->getEventParameters();
+        $params = new DataObject();
+        $params->setData([
+            'value' =>  $value,
+            'field' =>  $field
+        ]);
+        $eventParameters['params'] = $params;
+
+        $this->eventManager->dispatch("model_load_before", $eventParameters);
+        $this->eventManager->dispatch(self::EVENT_PREFIX."_load_before", $eventParameters);
+
+        $field = $params->getData('field');
+        $value = $params->getData('value');
+
         $this->getSelect()->addFieldToFilter($field, $value)->addLimit(1);
         $result = $this->getConnection()->query($this->getSelect())->getFirstItem();
         $this->origData = $result;
-        return $this->setData($result->getData());
+        $this->setData($result->getData());
+
+        $this->eventManager->dispatch("model_load_after", $eventParameters);
+        $this->eventManager->dispatch(self::EVENT_PREFIX."_load_after", $eventParameters);
+
+        return $this;
+
     }
 
     /**
@@ -86,12 +120,20 @@ class AbstractModel extends DataObject
      * @throws TmvcException
      */
     public function save() {
+
+        $this->eventManager->dispatch("model_save_before", $this->getEventParameters());
+        $this->eventManager->dispatch(self::EVENT_PREFIX."_save_before", $this->getEventParameters());
+
         $query = ObjectManager::create(Save::class, [
-            $this->tableName,
-            $this->getData(),
-            $this->indexField
+            "tableName" => $this->tableName,
+            "data" => $this->getData(),
+            "id" => $this->indexField
         ]);
         $result = $this->getConnection()->query($query);
+
+        $this->eventManager->dispatch("model_save_after", $this->getEventParameters());
+        $this->eventManager->dispatch(self::EVENT_PREFIX."_save_after", $this->getEventParameters());
+
         return $this->getId() ? $this : $this->setData($this->indexField, $result->getLastInsertId());
     }
 
@@ -101,12 +143,20 @@ class AbstractModel extends DataObject
      */
     public function delete() {
         if ($this->getData($this->indexField)) {
+
+            $this->eventManager->dispatch("model_delete_before", $this->getEventParameters());
+            $this->eventManager->dispatch(self::EVENT_PREFIX."_delete_before", $this->getEventParameters());
+
             $query = ObjectManager::create(Delete::class, [
-                $this->tableName,
-                $this->indexField,
-                $this->getData($this->indexField)
+                "tableName" => $this->tableName,
+                "idField" => $this->indexField,
+                "value" => $this->getData($this->indexField)
             ]);
             $result = $this->getConnection()->query($query);
+
+            $this->eventManager->dispatch("model_delete_after", $this->getEventParameters());
+            $this->eventManager->dispatch(self::EVENT_PREFIX."_delete_after", $this->getEventParameters());
+
         }
         return $this;
     }
@@ -120,5 +170,15 @@ class AbstractModel extends DataObject
 
     public function getSelect() {
         return $this->select;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getEventParameters() {
+        return [
+            "model" =>  $this,
+            self::EVENT_PREFIX  => $this
+        ];
     }
 }
