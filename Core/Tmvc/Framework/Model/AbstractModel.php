@@ -37,6 +37,10 @@ class AbstractModel extends DataObject
      */
     protected $select;
 
+    /**
+     * AbstractModel constructor.
+     * @throws TmvcException
+     */
     public function __construct()
     {
         if (!$this->tableName || !$this->indexField) {
@@ -65,6 +69,7 @@ class AbstractModel extends DataObject
      * @param string $value
      * @param null|string $field
      * @return $this
+     * @throws TmvcException
      */
     public function load($value, $field = null) {
         if (!$field) {
@@ -78,6 +83,7 @@ class AbstractModel extends DataObject
 
     /**
      * @return $this
+     * @throws TmvcException
      */
     public function save() {
         $query = ObjectManager::create(Save::class, [
@@ -89,6 +95,10 @@ class AbstractModel extends DataObject
         return $this->getId() ? $this : $this->setData($this->indexField, $result->getLastInsertId());
     }
 
+    /**
+     * @return $this
+     * @throws TmvcException
+     */
     public function delete() {
         if ($this->getData($this->indexField)) {
             $query = ObjectManager::create(Delete::class, [
