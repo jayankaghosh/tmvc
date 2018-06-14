@@ -2,11 +2,28 @@
 
 use Tmvc\Framework\Controller\AbstractController;
 
+use Tmvc\Framework\Event\Manager as EventManager;
+
 class Router {
 
     const CUSTOM_ROUTES_VAR_KEY = "_tmvc_custom_routes";
 
     protected $initiated = false;
+    /**
+     * @var EventManager
+     */
+    private $eventManager;
+
+    /**
+     * Router constructor.
+     * @param EventManager $eventManager
+     */
+    public function __construct(
+        EventManager $eventManager
+    )
+    {
+        $this->eventManager = $eventManager;
+    }
 
     /**
      * @param \Tmvc\Framework\App\Request $request
@@ -93,7 +110,20 @@ class Router {
                 throw new InvalidArgumentException(gettype($class)." is not a valid controller type");
         }
         if ($obj instanceof AbstractController) {
+
+            $eventParameters = [
+                'controller'    =>  $obj,
+                'request'       =>  $request
+            ];
+
+            $this->eventManager->dispatch("controller_action_predispatch", $eventParameters);
+            $this->eventManager->dispatch($request->getFullRoute()."_predispatch", $eventParameters);
+
             $result = $obj->execute($request);
+
+            $this->eventManager->dispatch("controller_action_postdispatch", $eventParameters);
+            $this->eventManager->dispatch($request->getFullRoute()."_postdispatch", $eventParameters);
+
 
             if ($result instanceof \Tmvc\Framework\View\View) {
                 /* @var \Tmvc\Framework\App\Response $response */
