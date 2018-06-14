@@ -98,7 +98,7 @@ class AbstractModel extends DataObject
         $eventParameters['params'] = $params;
 
         $this->eventManager->dispatch("model_load_before", $eventParameters);
-        $this->eventManager->dispatch(self::EVENT_PREFIX."_load_before", $eventParameters);
+        $this->eventManager->dispatch(static::EVENT_PREFIX."_load_before", $eventParameters);
 
         $field = $params->getData('field');
         $value = $params->getData('value');
@@ -109,7 +109,7 @@ class AbstractModel extends DataObject
         $this->setData($result->getData());
 
         $this->eventManager->dispatch("model_load_after", $eventParameters);
-        $this->eventManager->dispatch(self::EVENT_PREFIX."_load_after", $eventParameters);
+        $this->eventManager->dispatch(static::EVENT_PREFIX."_load_after", $eventParameters);
 
         return $this;
 
@@ -122,7 +122,7 @@ class AbstractModel extends DataObject
     public function save() {
 
         $this->eventManager->dispatch("model_save_before", $this->getEventParameters());
-        $this->eventManager->dispatch(self::EVENT_PREFIX."_save_before", $this->getEventParameters());
+        $this->eventManager->dispatch(static::EVENT_PREFIX."_save_before", $this->getEventParameters());
 
         $query = ObjectManager::create(Save::class, [
             "tableName" => $this->tableName,
@@ -132,7 +132,7 @@ class AbstractModel extends DataObject
         $result = $this->getConnection()->query($query);
 
         $this->eventManager->dispatch("model_save_after", $this->getEventParameters());
-        $this->eventManager->dispatch(self::EVENT_PREFIX."_save_after", $this->getEventParameters());
+        $this->eventManager->dispatch(static::EVENT_PREFIX."_save_after", $this->getEventParameters());
 
         return $this->getId() ? $this : $this->setData($this->indexField, $result->getLastInsertId());
     }
@@ -145,7 +145,7 @@ class AbstractModel extends DataObject
         if ($this->getData($this->indexField)) {
 
             $this->eventManager->dispatch("model_delete_before", $this->getEventParameters());
-            $this->eventManager->dispatch(self::EVENT_PREFIX."_delete_before", $this->getEventParameters());
+            $this->eventManager->dispatch(static::EVENT_PREFIX."_delete_before", $this->getEventParameters());
 
             $query = ObjectManager::create(Delete::class, [
                 "tableName" => $this->tableName,
@@ -155,7 +155,7 @@ class AbstractModel extends DataObject
             $result = $this->getConnection()->query($query);
 
             $this->eventManager->dispatch("model_delete_after", $this->getEventParameters());
-            $this->eventManager->dispatch(self::EVENT_PREFIX."_delete_after", $this->getEventParameters());
+            $this->eventManager->dispatch(static::EVENT_PREFIX."_delete_after", $this->getEventParameters());
 
         }
         return $this;
@@ -178,7 +178,7 @@ class AbstractModel extends DataObject
     protected function getEventParameters() {
         return [
             "model" =>  $this,
-            self::EVENT_PREFIX  => $this
+            static::EVENT_PREFIX  => $this
         ];
     }
 }
