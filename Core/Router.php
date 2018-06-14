@@ -120,7 +120,7 @@ class Router {
     public static function addRoute($route, $method, $callback) {
         $key = $route."_".$method;
         $routes = self::getRoutes();
-        if (in_array($key, $routes)) {
+        if (array_key_exists($key, $routes)) {
             throw new \Tmvc\Framework\Exception\EntityAlreadyExistsException("Route $route with method $method was already defined");
         } else {
             $routes[$key] = [
@@ -128,7 +128,7 @@ class Router {
                 'method'    =>  $method,
                 'callback'  =>  $callback
             ];
-            \Tmvc\Framework\Tools\VarBucket::write(self::CUSTOM_ROUTES_VAR_KEY, $routes);
+            \Tmvc\Framework\Tools\VarBucket::write(self::CUSTOM_ROUTES_VAR_KEY, $routes, true);
         }
     }
 

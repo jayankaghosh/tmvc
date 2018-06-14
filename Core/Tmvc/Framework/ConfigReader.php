@@ -10,6 +10,7 @@
 namespace Tmvc\Framework;
 
 
+use Tmvc\Framework\App\Config;
 use Tmvc\Framework\Exception\EntityNotFoundException;
 use Tmvc\Framework\Tools\File;
 
@@ -29,19 +30,26 @@ class ConfigReader
      * @var Cache
      */
     private $cache;
+    /**
+     * @var Config
+     */
+    private $config;
 
     /**
      * ConfigReader constructor.
      * @param File $file
      * @param Cache $cache
+     * @param Config $config
      */
     public function __construct(
         File $file,
-        Cache $cache
+        Cache $cache,
+        Config $config
     )
     {
         $this->file = $file;
         $this->cache = $cache;
+        $this->config = $config;
     }
 
     /**
@@ -50,6 +58,8 @@ class ConfigReader
     public function read() {
         $files = $this->getConfigFiles();
         foreach ($files as $file) {
+            /* Pass an object of class Config to the config files */
+            $config = $this->config;
             if(!@require_once $file) {
                 throw new EntityNotFoundException("Config file $file not found");
             }
@@ -87,9 +97,9 @@ class ConfigReader
 
         $cache = implode("", $cache);
 
-        /* Remove blank lines */
-        $cache = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $cache);
-
+        /* Remove comments and blank lines */
+        $cache = preg_replace('!/\*.*?\*/!s', '', $cache);
+        $cache = preg_replace('/\n\s*\n/', "\n", $cache);
 
         $this->cache->set(self::CONFIG_FILES_CACHE_KEY, $cache);
         return $files;
