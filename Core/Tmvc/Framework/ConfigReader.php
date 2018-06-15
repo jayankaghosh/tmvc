@@ -13,11 +13,12 @@ namespace Tmvc\Framework;
 use Tmvc\Framework\App\Config;
 use Tmvc\Framework\Exception\EntityNotFoundException;
 use Tmvc\Framework\Tools\File;
+use Tmvc\Framework\Module\Manager as ModuleManager;
 
 class ConfigReader
 {
 
-    const CONFIG_FILES_CACHE_KEY = "_config_files";
+    const CONFIG_FILES_CACHE_KEY = "tmvc_config_files";
 
     const PHP_STARTING_TAG = "<?php";
     const PHP_ENDING_TAG = "?>";
@@ -34,22 +35,29 @@ class ConfigReader
      * @var Config
      */
     private $config;
+    /**
+     * @var ModuleManager
+     */
+    private $moduleManager;
 
     /**
      * ConfigReader constructor.
      * @param File $file
      * @param Cache $cache
      * @param Config $config
+     * @param ModuleManager $moduleManager
      */
     public function __construct(
         File $file,
         Cache $cache,
-        Config $config
+        Config $config,
+        ModuleManager $moduleManager
     )
     {
         $this->file = $file;
         $this->cache = $cache;
         $this->config = $config;
+        $this->moduleManager = $moduleManager;
     }
 
     /**
@@ -71,8 +79,16 @@ class ConfigReader
         if (file_exists($cache)) {
             return [$cache];
         }
-        $path = __DIR__."/../../../app/code/";
-        $files = glob($path."*/etc/config.php");
+
+        $files = [];
+
+        $modules = $this->moduleManager->getModuleList();
+        foreach ($modules as $module) {
+            $configFilePath = $module."/etc/config.php";
+            if (file_exists($configFilePath)) {
+                $files[] = $configFilePath;
+            }
+        }
 
         $cache = [
             self::PHP_STARTING_TAG
