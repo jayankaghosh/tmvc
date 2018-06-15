@@ -12,6 +12,7 @@ namespace Tmvc\Framework\App;
 
 use Tmvc\Framework\Event\Manager as EventManager;
 use Tmvc\Framework\Tools\ObjectManager;
+use Tmvc\Framework\Router\Manager as RouterManager;
 
 class Config
 {
@@ -19,16 +20,23 @@ class Config
      * @var EventManager
      */
     private $eventManager;
+    /**
+     * @var RouterManager
+     */
+    private $routerManager;
 
     /**
      * Config constructor.
      * @param EventManager $eventManager
+     * @param RouterManager $routerManager
      */
     public function __construct(
-        EventManager $eventManager
+        EventManager $eventManager,
+        RouterManager $routerManager
     )
     {
         $this->eventManager = $eventManager;
+        $this->routerManager = $routerManager;
     }
 
     /**
@@ -57,5 +65,13 @@ class Config
      */
     public function addClassPreference($sourceClass, $preferredClass) {
         ObjectManager::addClassPreference($sourceClass, $preferredClass);
+    }
+
+    /**
+     * @param string $routerName
+     */
+    public function addRouter($routerName) {
+        $router = ObjectManager::get($routerName);
+        $this->routerManager->addRouter($router);
     }
 }

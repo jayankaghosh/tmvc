@@ -63,9 +63,6 @@ class Application {
         $moduleManager->manage();
 
         /* Route the query */
-        /* @var Router $router */
-        $router = \Tmvc\Framework\Tools\ObjectManager::get(Router::class);
-
         $query = $this->getQueryParameters();
         /* @var \Tmvc\Framework\App\Request $request */
         $request = \Tmvc\Framework\Tools\ObjectManager::get(\Tmvc\Framework\App\Request::class);
@@ -77,7 +74,23 @@ class Application {
             ->setPostParams($query['post_params'])
             ->setMethod($this->serverParameters['REQUEST_METHOD']);
 
-        $router->route($request);
+        /* @var \Tmvc\Framework\Router\Manager $routerManager */
+        $routerManager = \Tmvc\Framework\Tools\ObjectManager::get(\Tmvc\Framework\Router\Manager::class);
+        $routers = $routerManager->getRouterPool();
+
+        $routed = false;
+        foreach ($routers as $router) {
+            if ($routed = $router->route($request, $this->getQueryString())) {
+                break;
+            }
+        }
+
+        /* Call default router if none of the routers in the pool can handle the request */
+        if (!$routed) {
+            /* @var \Tmvc\Framework\Router\RouterInterface $router */
+            $router = \Tmvc\Framework\Tools\ObjectManager::get(Router::class);
+            $router->route($request, $this->getQueryString());
+        }
     }
 
     protected function getQueryParameter($type = "module") {

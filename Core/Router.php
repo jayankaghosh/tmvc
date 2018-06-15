@@ -3,8 +3,9 @@
 use Tmvc\Framework\Controller\AbstractController;
 
 use Tmvc\Framework\Event\Manager as EventManager;
+use Tmvc\Framework\Router\RouterInterface;
 
-class Router {
+class Router implements RouterInterface {
 
     const CUSTOM_ROUTES_VAR_KEY = "_tmvc_custom_routes";
 
@@ -25,13 +26,19 @@ class Router {
         $this->eventManager = $eventManager;
     }
 
+
     /**
      * @param \Tmvc\Framework\App\Request $request
+     * @param $queryString
+     * @return boolean
      * @throws \Tmvc\Framework\Exception\ArgumentMismatchException
      * @throws \Tmvc\Framework\Exception\EntityNotFoundException
      * @throws \Tmvc\Framework\Exception\TmvcException
      */
-    public function route(\Tmvc\Framework\App\Request $request) {
+    public function route(
+        \Tmvc\Framework\App\Request $request,
+        $queryString
+    ) {
 
         try {
 
@@ -79,11 +86,12 @@ class Router {
                     ->setModule($noRoutePage[0])
                     ->setController($noRoutePage[1])
                     ->setAction($noRoutePage[2]);
-                $this->route($request);
+                $this->route($request, $queryString);
             } else {
                 throw $entityNotFoundException;
             }
         }
+        return true;
     }
 
 
