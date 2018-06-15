@@ -55,6 +55,7 @@ class Install implements SetupInstallInterface
                 1000
             );
             $installer->createTable($table);
+            return "URL Rewrite table created with query: ".$table->__toString();
         } catch (TmvcException $tmvcException) {
             return $tmvcException->getTraceAsString();
         }
