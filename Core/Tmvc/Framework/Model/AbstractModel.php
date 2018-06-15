@@ -19,13 +19,10 @@ use Tmvc\Framework\Tools\ObjectManager;
 use Tmvc\Framework\Tools\VarBucket;
 use Tmvc\Framework\Event\Manager as EventManager;
 
-class AbstractModel extends DataObject
+abstract class AbstractModel extends DataObject
 {
 
     const EVENT_PREFIX = "abstract_model";
-
-    /* To be overridden by child classes */
-    protected $tableName = null;
 
     protected $indexField = "id";
 
@@ -55,13 +52,16 @@ class AbstractModel extends DataObject
         EventManager $eventManager
     )
     {
-        if (!$this->tableName || !$this->indexField) {
-            throw new TmvcException("Table name or Index field are not defined. Please redefine these variables in your Model \"".get_called_class()."\".");
-        }
         $this->dbConn = VarBucket::read(Db::DB_CONNECTION_VAR_KEY);
-        $this->select = ObjectManager::create(Select::class, ["tableName" => $this->tableName]);
+        $this->select = ObjectManager::create(Select::class, ["tableName" => $this->getTableName()]);
         $this->eventManager = $eventManager;
     }
+
+    /**
+     * To be overridden by child classes
+     * @return string
+     */
+    abstract public function getTableName();
 
     public function getId() {
         return $this->getData($this->indexField);
