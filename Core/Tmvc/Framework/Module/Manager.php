@@ -73,20 +73,28 @@ class Manager
         if (!$this->_moduleList) {
             $cache = $this->cache->get(self::MODULE_LIST_CACHE_KEY);
             if (!$cache) {
-                $modules = [];
-                $path = __DIR__ . "/../../../../app/code/";
-                $files = glob($path . "*/*");
-                array_walk($files, function ($file) use (&$modules) {
-                    $module = realpath($file);
-                    $moduleName = explode("/", $module);
-                    $moduleName = $moduleName[count($moduleName) - 2] . "_" . $moduleName[count($moduleName) - 1];
-                    $modules[$moduleName] = $module;
-                });
+                $systemModulesPath = __DIR__ . "/../../../";
+                $userModulesPath = __DIR__ . "/../../../../app/code/";
+                $systemModules = $this->_getModules($systemModulesPath);
+                $userModules = $this->_getModules($userModulesPath);
+                $modules = array_merge($systemModules, $userModules);
                 $cache = \json_encode($modules);
                 $this->cache->set(self::MODULE_LIST_CACHE_KEY, $cache);
             }
             $this->_moduleList = \json_decode($cache, true);
         }
         return $this->_moduleList;
+    }
+
+    private function _getModules($path) {
+        $modules = [];
+        $files = glob($path . "*/*");
+        array_walk($files, function ($file) use (&$modules) {
+            $module = realpath($file);
+            $moduleName = explode("/", $module);
+            $moduleName = $moduleName[count($moduleName) - 2] . "_" . $moduleName[count($moduleName) - 1];
+            $modules[$moduleName] = $module;
+        });
+        return $modules;
     }
 }

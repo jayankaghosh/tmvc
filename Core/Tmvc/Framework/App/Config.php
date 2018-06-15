@@ -35,11 +35,12 @@ class Config
      * @param $route
      * @param $method
      * @param $callback
+     * @param bool $override
      * @throws \Tmvc\Framework\Exception\EntityAlreadyExistsException
      * @throws \Tmvc\Framework\Exception\TmvcException
      */
-    public function addRoute($route, $method, $callback) {
-        \Router::addRoute($route, $method, $callback);
+    public function addRoute($route, $method, $callback, $override = false) {
+        \Router::addRoute($route, $method, $callback, $override);
     }
 
     /**

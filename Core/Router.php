@@ -144,13 +144,14 @@ class Router {
      * @param string $route
      * @param string $method
      * @param AbstractController|array|callable $callback
+     * @param bool $override
      * @throws \Tmvc\Framework\Exception\EntityAlreadyExistsException
      * @throws \Tmvc\Framework\Exception\TmvcException
      */
-    public static function addRoute($route, $method, $callback) {
+    public static function addRoute($route, $method, $callback, $override) {
         $key = $route."_".$method;
         $routes = self::getRoutes();
-        if (array_key_exists($key, $routes)) {
+        if (array_key_exists($key, $routes) && !$override) {
             throw new \Tmvc\Framework\Exception\EntityAlreadyExistsException("Route $route with method $method was already defined");
         } else {
             $routes[$key] = [
