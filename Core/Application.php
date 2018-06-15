@@ -62,8 +62,25 @@ class Application {
         $moduleManager = \Tmvc\Framework\Tools\ObjectManager::get(\Tmvc\Framework\Module\Manager::class);
         $moduleManager->manage();
 
+        $this->route();
+
+    }
+
+    /**
+     * @param string $queryString
+     */
+    public function forward($queryString) {
+        $this->route($queryString);
+    }
+
+    protected function route($queryString = null) {
         /* Route the query */
-        $query = $this->getQueryParameters();
+
+        if (!$queryString) {
+            $queryString = $this->getQueryString();
+        }
+
+        $query = $this->getQueryParameters($queryString);
         /* @var \Tmvc\Framework\App\Request $request */
         $request = \Tmvc\Framework\Tools\ObjectManager::get(\Tmvc\Framework\App\Request::class);
         $request
@@ -80,7 +97,7 @@ class Application {
 
         $routed = false;
         foreach ($routers as $router) {
-            if ($routed = $router->route($request, $this->getQueryString())) {
+            if ($routed = $router->route($request, $queryString, $this)) {
                 break;
             }
         }
@@ -89,7 +106,7 @@ class Application {
         if (!$routed) {
             /* @var \Tmvc\Framework\Router\RouterInterface $router */
             $router = \Tmvc\Framework\Tools\ObjectManager::get(Router::class);
-            $router->route($request, $this->getQueryString());
+            $router->route($request, $queryString, $this);
         }
     }
 
@@ -97,9 +114,11 @@ class Application {
         return isset($this->getQueryParameters()[$type]) ? $this->getQueryParameters()[$type] : $this->getQueryParameters()["module"];
     }
 
-    protected function getQueryParameters() {
-        if (!$this->queryParameters) {
-            $queryString = $this->getQueryString();
+    protected function getQueryParameters($queryString = null) {
+        if (!$this->queryParameters || $queryString) {
+            if (!$queryString) {
+                $queryString = $this->getQueryString();
+            }
 
             /* Remove GET Params from query string */
             $queryString = str_replace("?".urldecode(http_build_query($_GET)), "", $queryString);

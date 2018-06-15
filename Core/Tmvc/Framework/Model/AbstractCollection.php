@@ -54,7 +54,7 @@ abstract class AbstractCollection extends DataObject implements \IteratorAggrega
         $this->_db = $db;
         /* @var AbstractModel $model */
         $model = ObjectManager::get($this->getModelName());
-        $this->select = ObjectManager::create(Select::class, [
+        $this->_select = ObjectManager::create(Select::class, [
             'tableName' =>  $model->getTableName()
         ]);
     }
@@ -74,13 +74,20 @@ abstract class AbstractCollection extends DataObject implements \IteratorAggrega
 
     /**
      * @throws \Tmvc\Framework\Exception\TmvcException
+     * @return $this
      */
-    protected function load() {
+    public function load() {
         if (!$this->_loaded) {
             $this->_result = $this->_db->query($this->_select);
-            $this->setData($this->_result->getItems());
+            $items = $this->_result->getItems();
+            $data = [];
+            foreach ($items as $item) {
+                $data[] = $this->_getNewModelInstance()->setData($item->getData());
+            }
+            $this->setData($data);
             $this->_loaded = true;
         }
+        return $this;
     }
 
     /**
@@ -119,6 +126,12 @@ abstract class AbstractCollection extends DataObject implements \IteratorAggrega
     public function getIterator()
     {
         $this->load();
-        return ObjectManager::create(Iterator::class, ["data" => $this->getData()]);
+        return new \ArrayIterator($this->data);
+    }
+
+    public function getData($key = null, $default = null)
+    {
+        $this->load();
+        return parent::getData($key, $default);
     }
 }

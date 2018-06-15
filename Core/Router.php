@@ -30,6 +30,7 @@ class Router implements RouterInterface {
     /**
      * @param \Tmvc\Framework\App\Request $request
      * @param $queryString
+     * @param Application $application
      * @return boolean
      * @throws \Tmvc\Framework\Exception\ArgumentMismatchException
      * @throws \Tmvc\Framework\Exception\EntityNotFoundException
@@ -37,9 +38,9 @@ class Router implements RouterInterface {
      */
     public function route(
         \Tmvc\Framework\App\Request $request,
-        $queryString
+        $queryString,
+        Application $application
     ) {
-
         try {
 
             /* Check custom routes first */
@@ -86,7 +87,7 @@ class Router implements RouterInterface {
                     ->setModule($noRoutePage[0])
                     ->setController($noRoutePage[1])
                     ->setAction($noRoutePage[2]);
-                $this->route($request, $queryString);
+                $this->route($request, $queryString, $application);
             } else {
                 throw $entityNotFoundException;
             }

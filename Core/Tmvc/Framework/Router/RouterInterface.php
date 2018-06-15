@@ -17,7 +17,8 @@ interface RouterInterface
     /**
      * @param Request $request
      * @param string $queryString
+     * @param \Application $application
      * @return boolean
      */
-    public function route(Request $request, $queryString);
+    public function route(Request $request, $queryString, \Application $application);
 }

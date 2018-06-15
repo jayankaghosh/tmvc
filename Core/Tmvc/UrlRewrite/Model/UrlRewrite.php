@@ -17,9 +17,16 @@ class UrlRewrite extends AbstractModel
     const TABLE_NAME = "url_rewrite";
     const EVENT_PREFIX = "url_rewrite";
 
-    protected $tableName = self::TABLE_NAME;
     protected $indexField = "url_rewrite_id";
 
+    /**
+     * To be overridden by child classes
+     * @return string
+     */
+    public function getTableName()
+    {
+        return self::TABLE_NAME;
+    }
 
     /**
      * @return string
