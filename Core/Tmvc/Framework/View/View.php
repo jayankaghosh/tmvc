@@ -11,7 +11,9 @@ namespace Tmvc\Framework\View;
 
 
 use Tmvc\Framework\DataObject;
+use Tmvc\Framework\Exception\EntityNotFoundException;
 use Tmvc\Framework\Tools\ObjectManager;
+use Tmvc\Framework\Module\Manager as ModuleManager;
 
 class View
 {
@@ -19,15 +21,30 @@ class View
     private $layout;
 
     private $block;
+    /**
+     * @var ModuleManager
+     */
+    private $moduleManager;
+
+    /**
+     * View constructor.
+     * @param ModuleManager $moduleManager
+     */
+    public function __construct(
+        ModuleManager $moduleManager
+    )
+    {
+        $this->moduleManager = $moduleManager;
+    }
 
     public function loadView($name, $block = []) {
         $name = explode("::", $name);
         if (count($name) > 1) {
-            $path = $name[0] . "/view/" . $name[1];
+            $path = $this->moduleManager->getModule($name[0]) . "/view/" . $name[1];
         } else {
             $path = $name[0];
         }
-        $this->layout = "app/code/".$path;
+        $this->layout = $path;
         if (is_array($block)) {
             $block = ObjectManager::create(DataObject::class)->setData($block);
         } else if (is_string($block)) {
@@ -46,9 +63,13 @@ class View
 
     /**
      * @return string
+     * @throws \InvalidArgumentException
      */
     public function render()
     {
+        if (!$this->layout) {
+            throw new \InvalidArgumentException("No view was initialized");
+        }
         $viewRender = \Closure::bind(function ($block) {
             ob_start();
             include $this->layout;

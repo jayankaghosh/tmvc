@@ -171,7 +171,7 @@ class Request
     }
 
     public function getFullRoute() {
-        return $this->getModule()."/".$this->getController()."/".$this->getAction();
+        return implode("/", array_filter([$this->getModule(), $this->getController(), $this->getAction()]));
     }
 
     /**

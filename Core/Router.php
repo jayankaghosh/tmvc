@@ -81,12 +81,19 @@ class Router implements RouterInterface {
             $this->executeController($className, $request);
         } catch (\Tmvc\Framework\Exception\EntityNotFoundException $entityNotFoundException) {
             if (!$this->initiated) {
-                $noRoutePage = array_pad(explode("/", $this->getAppEnv()->read('default_pages.404')), 3, "index");
+                if (isset(self::getRoutes()['noroute/index/index_'.$request->getMethod()])){
+                    $request
+                        ->setModule('noroute')
+                        ->setController('index')
+                        ->setAction('index');
+                } else {
+                    $noRoutePage = array_pad(explode("/", $this->getAppEnv()->read('default_pages.404')), 3, "index");
+                    $request
+                        ->setModule($noRoutePage[0])
+                        ->setController($noRoutePage[1])
+                        ->setAction($noRoutePage[2]);
+                }
                 $this->initiated = true;
-                $request
-                    ->setModule($noRoutePage[0])
-                    ->setController($noRoutePage[1])
-                    ->setAction($noRoutePage[2]);
                 $this->route($request, $queryString, $application);
             } else {
                 throw $entityNotFoundException;
@@ -158,6 +165,7 @@ class Router implements RouterInterface {
      * @throws \Tmvc\Framework\Exception\TmvcException
      */
     public static function addRoute($route, $method, $callback, $override) {
+        $route = implode("/", array_pad(explode("/", $route), "3", "index"));
         $key = $route."_".$method;
         $routes = self::getRoutes();
         if (array_key_exists($key, $routes) && !$override) {
