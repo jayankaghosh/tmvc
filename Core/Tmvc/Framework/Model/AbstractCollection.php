@@ -66,6 +66,25 @@ abstract class AbstractCollection extends DataObject implements \IteratorAggrega
     abstract public function getModelName();
 
     /**
+     * @param string|array $field
+     * @param string|array $value
+     * @return $this
+     */
+    public function addFieldToFilter($field, $value = null) {
+        $this->getSelect()->addFieldToFilter($field, $value);
+        return $this;
+    }
+
+    /**
+     * @param string $field
+     * @return $this
+     */
+    public function addFieldToSelect($field) {
+        $this->getSelect()->addFieldToSelect($field);
+        return $this;
+    }
+
+    /**
      * @return Select
      */
     public function getSelect() {
@@ -95,6 +114,7 @@ abstract class AbstractCollection extends DataObject implements \IteratorAggrega
      * @throws \Tmvc\Framework\Exception\TmvcException
      */
     public function getFirstItem() {
+        $this->load();
         return $this->_getNewModelInstance()->setData($this->_result->getFirstItem()->getData());
     }
 
@@ -103,6 +123,7 @@ abstract class AbstractCollection extends DataObject implements \IteratorAggrega
      * @throws \Tmvc\Framework\Exception\TmvcException
      */
     public function getLastItem() {
+        $this->load();
         return $this->_getNewModelInstance()->setData($this->_result->getLastItem()->getData());
     }
 

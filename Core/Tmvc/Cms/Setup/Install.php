@@ -7,14 +7,14 @@
  * @link        http://www.codilar.com/
  */
 
-namespace Tmvc\UrlRewrite\Setup;
+namespace Tmvc\Cms\Setup;
 
 
+use Tmvc\Cms\Model\Cms;
 use Tmvc\Framework\Exception\TmvcException;
 use Tmvc\Framework\Model\Resource\Table;
 use Tmvc\Framework\Module\Setup\Installer;
 use Tmvc\Framework\Module\Setup\SetupInstallInterface;
-use Tmvc\UrlRewrite\Model\UrlRewrite;
 
 class Install implements SetupInstallInterface
 {
@@ -26,9 +26,9 @@ class Install implements SetupInstallInterface
     public function execute(Installer $installer)
     {
         try {
-            $table = $installer->getTable(UrlRewrite::TABLE_NAME);
+            $table = $installer->getTable(Cms::TABLE_NAME);
             $table->addColumn(
-                "url_rewrite_id",
+                "cms_page_id",
                 Table::TYPE_INTEGER,
                 null,
                 [
@@ -36,26 +36,36 @@ class Install implements SetupInstallInterface
                     "NOT NULL"
                 ]
             )->addColumn(
-                "request_path",
+                "identifier",
                 Table::TYPE_TEXT,
                 1000,
                 [
                     "NOT NULL"
                 ]
             )->addColumn(
-                "actual_path",
+                "page_content",
                 Table::TYPE_TEXT,
-                1000,
+                null,
                 [
                     "NOT NULL"
                 ]
             )->addColumn(
-                "additional_information",
-                Table::TYPE_TEXT,
-                1000
+                "response_code",
+                Table::TYPE_INTEGER,
+                5,
+                [
+                    "NOT NULL"
+                ]
+            )->addColumn(
+                "is_enabled",
+                Table::TYPE_SMALLINT,
+                1,
+                [
+                    "NOT NULL"
+                ]
             );
             $installer->createTable($table);
-            return "URL Rewrite table created with query: ".$table->__toString();
+            return "CMS Page table created with query: ".$table->__toString();
         } catch (TmvcException $tmvcException) {
             return $tmvcException->getMessage()."\n\n".$tmvcException->getTraceAsString();
         }

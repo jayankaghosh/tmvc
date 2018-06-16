@@ -39,6 +39,12 @@ class Select
      * @return $this
      */
     public function addFieldToFilter($field, $value = null) {
+        if (is_string($field)) {
+            $field = "`$field`";
+        }
+        if (is_string($value)) {
+            $value = "'$value'";
+        }
         if (is_string($field) && !$value) {
             $this->conditions[] = $field;
         } else if (is_string($field) && !is_array($value)){
