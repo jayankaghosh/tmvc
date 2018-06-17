@@ -55,12 +55,7 @@ class FactoryGenerator
                     "name" => "data",
                     "default" => "[]"
                 ]
-            ], '
-$arguments = [];
-foreach($data as $key => $value) {
-    $arguments[$key] = $value;
-}
-return \\'.ObjectManager::class.'::create(\\'.$className.'::class, $arguments);',
+            ], 'return \\'.ObjectManager::class.'::create(\\'.$className.'::class, $data);',
                 "public",
                 [
                     "@param array \$data",

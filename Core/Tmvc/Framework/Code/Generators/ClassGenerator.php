@@ -91,7 +91,7 @@ class ClassGenerator
     {
         /* @var \Tmvc\Framework\Code\Generators\MethodGenerator $methodGenerator */
         $methodGenerator = ObjectManager::create(MethodGenerator::class);
-        $methodGenerator->setScope($scope)->setName($name)->setBody($body);
+        $methodGenerator->setScope($scope)->setName($name)->setBody($body)->setPadding(1);
         foreach ($arguments as $argument) {
             $methodGenerator->addArgument($argument['type'], $argument['name'], $argument['default']);
         }

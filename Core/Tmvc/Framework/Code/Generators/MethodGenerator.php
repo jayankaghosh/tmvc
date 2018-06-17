@@ -13,6 +13,11 @@ namespace Tmvc\Framework\Code\Generators;
 class MethodGenerator
 {
     /**
+     * @var int
+     */
+    private $padding;
+
+    /**
      * @var string
      */
     private $scope = "";
@@ -138,6 +143,7 @@ class MethodGenerator
      * @return string
      */
     public function generate() {
+        $padding = $this->getPadding();
         $content = "";
         $arguments = [];
         foreach ($this->getArguments() as $argument) {
@@ -148,20 +154,41 @@ class MethodGenerator
             $arguments[] = trim($argumentDefinition);
         }
         if (count($this->getComments())) {
-            $content .= "/**";
+            $content .= "$padding/**";
             foreach ($this->getComments() as $comment) {
-                $content .= "\n * $comment";
+                $content .= "\n$padding * $comment";
             }
-            $content .= "\n */\n";
+            $content .= "\n$padding */\n";
         }
-        $content .= $this->getScope()." function ".$this->getName()."(".implode(", ", $arguments).") {";
-        $content .= "\n".$this->getBody();
-        $content .= "\n}";
+        $content .= $padding.$this->getScope()." function ".$this->getName()."(".implode(", ", $arguments).") {";
+        $originalPadding = $this->padding;
+        $this->setPadding($originalPadding+1);
+        $content .= preg_replace("/[\r\n]/", "\r\n".$this->getPadding(), "\n".$this->getBody());
+        $this->setPadding($originalPadding);
+        $content .= "\n$padding}";
         return $content;
     }
 
     public function __toString()
     {
         return $this->generate();
+    }
+
+    /**
+     * @return int
+     */
+    public function getPadding()
+    {
+        return str_repeat("\t", (int)$this->padding);
+    }
+
+    /**
+     * @param int $padding
+     * @return $this
+     */
+    public function setPadding($padding)
+    {
+        $this->padding = (int)$padding;
+        return $this;
     }
 }
