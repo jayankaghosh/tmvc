@@ -11,6 +11,7 @@ namespace Tmvc\Framework\Controller;
 
 use Tmvc\Framework\App\Request;
 use Tmvc\Framework\App\Response;
+use Tmvc\Framework\Exception\TmvcException;
 use Tmvc\Framework\Tools\ObjectManager;
 use Tmvc\Framework\View\View;
 
@@ -38,6 +39,7 @@ abstract class AbstractController
     /**
      * @param Request $request
      * @return View|Response
+     * @throws TmvcException
      */
     abstract public function execute(Request $request);
 }

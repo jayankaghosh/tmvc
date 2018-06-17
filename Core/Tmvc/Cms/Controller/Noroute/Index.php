@@ -13,6 +13,7 @@ namespace Tmvc\Cms\Controller\Noroute;
 use Tmvc\Framework\App\Request;
 use Tmvc\Framework\App\Response;
 use Tmvc\Framework\Controller\AbstractController;
+use Tmvc\Framework\Exception\TmvcException;
 use Tmvc\Framework\View\View;
 
 class Index extends AbstractController
@@ -21,9 +22,10 @@ class Index extends AbstractController
     /**
      * @param Request $request
      * @return View|Response
+     * @throws TmvcException
      */
     public function execute(Request $request)
     {
-        return $this->getView()->loadView('Tmvc_Cms::noroute.phtml');
+        return $this->getView()->loadView('cms_noroute', 'Tmvc_Cms::noroute.phtml');
     }
 }
