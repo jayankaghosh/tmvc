@@ -47,19 +47,16 @@ class Router implements RouterInterface
      * @param string $queryString
      * @param \Application $application
      * @return boolean
+     * @throws TmvcException
      */
     public function route(Request $request, $queryString, \Application $application)
     {
-        try {
-            /* @var \Tmvc\Cms\Model\Page $cmsPageModel */
-            $cmsPageModel = $this->cmsPageCollection->addFieldToFilter('identifier', $queryString)->addFieldToFilter('is_enabled', Page::IS_ENABLED)->getFirstItem();
-            if ($cmsPageModel->getId()) {
-                $this->cmsRenderHelper->renderPage($cmsPageModel)->sendResponse();
-                return true;
-            } else {
-                return false;
-            }
-        } catch (TmvcException $tmvcException) {
+        /* @var \Tmvc\Cms\Model\Page $cmsPageModel */
+        $cmsPageModel = $this->cmsPageCollection->addFieldToFilter('identifier', $queryString)->addFieldToFilter('is_enabled', Page::IS_ENABLED)->getFirstItem();
+        if ($cmsPageModel->getId()) {
+            $this->cmsRenderHelper->renderPage($cmsPageModel)->sendResponse();
+            return true;
+        } else {
             return false;
         }
     }

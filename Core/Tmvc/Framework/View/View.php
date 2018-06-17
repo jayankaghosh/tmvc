@@ -146,6 +146,7 @@ class View
 
     /**
      * @param null|string|array|DataObject $block
+     * @return $this
      * @throws ArgumentMismatchException
      * @throws \Tmvc\Framework\Exception\TmvcException
      */
@@ -160,6 +161,8 @@ class View
         if (!$block instanceof DataObject) {
             throw new ArgumentMismatchException("Block passed to view ".$this->getId()." should be an instance of ".DataObject::class);
         }
+        $this->block = $block;
+        return $this;
     }
 
     /**
@@ -176,5 +179,10 @@ class View
     public function setResult($result) {
         $this->result = $result;
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->render();
     }
 }

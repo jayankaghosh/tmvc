@@ -15,26 +15,34 @@ use Tmvc\Cms\Model\Page;
 use Tmvc\Framework\App\Response;
 use Tmvc\Framework\Exception\TmvcException;
 use Tmvc\Framework\Tools\ObjectManager;
+use Tmvc\Framework\View\View;
 
 class Render
 {
 
-    const TEMPLATE_VARIABLE_REGEX = "/\{\{@(.*) (.*)\}\}/";
+    const TEMPLATE_VARIABLE_REGEX = "/\{\{@([^{} ]+) ([^ {}]+) ?([^{}]*)\}\}/";
 
     /**
      * @var Response
      */
     private $response;
+    /**
+     * @var View
+     */
+    private $view;
 
     /**
      * Render constructor.
      * @param Response $response
+     * @param View $view
      */
     public function __construct(
-        Response $response
+        Response $response,
+        View $view
     )
     {
         $this->response = $response;
+        $this->view = $view;
     }
 
     /**
@@ -76,7 +84,7 @@ class Render
      * @throws TmvcException
      */
     protected function _replaceVariables($args) {
-        @list ($match, $type, $value) = $args;
+        @list ($match, $type, $value, $data) = $args;
         switch ($type) {
             case "block":
                 /* @var \Tmvc\Cms\Model\Block $block */
@@ -87,7 +95,13 @@ class Render
                 } else {
                     return "";
                 }
-                break;
+            case "view":
+                $block = [];
+                foreach (explode(" ", trim($data)) as $datum) {
+                    @list($dataKey, $dataValue) = explode("=", $datum);
+                    $block[$dataKey] = $dataValue;
+                }
+                return $this->view->loadView(uniqid(), $value, $block);
             default:
                 throw new TmvcException("Error rendering template. Type $type not found");
         }
