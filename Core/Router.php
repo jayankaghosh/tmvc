@@ -113,11 +113,7 @@ class Router implements RouterInterface {
         /* @var AbstractController $obj */
         switch (gettype($class)) {
             case "string":
-                try {
-                    $obj = \Tmvc\Framework\Tools\ObjectManager::get($class);
-                } catch (\Exception $exception) {
-                    throw new \Tmvc\Framework\Exception\EntityNotFoundException("Controller Action Not found");
-                }
+                $obj = \Tmvc\Framework\Tools\ObjectManager::get($class);
                 break;
             case "object":
                 $obj = $class;
