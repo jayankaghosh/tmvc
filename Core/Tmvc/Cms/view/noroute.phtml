@@ -1,1 +1,6 @@
-<h1>OOPS</h1>
+<?php
+/* @var \Tmvc\Framework\View\View $this */
+?>
+<?= $this->loadSection('header', 'Tmvc_Cms::html/header.phtml', \Tmvc\Cms\Block\Header::class) ?>
+<h1>OOPS! The page you're looking for is not found</h1>
+<?= $this->loadSection('footer', 'Tmvc_Cms::html/footer.phtml', \Tmvc\Cms\Block\Footer::class) ?>

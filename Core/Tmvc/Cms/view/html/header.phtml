@@ -1,0 +1,8 @@
+<?php
+/* @var \Tmvc\Cms\Block\Header $block */
+?>
+<?php if ($block->cmsBlockExists()): ?>
+{{@block <?= $block::IDENTIFIER ?>}}
+<?php else: ?>
+<h1>THIS IS A HEADER</h1>
+<?php endif; ?>
