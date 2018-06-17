@@ -14,15 +14,15 @@ use Tmvc\Cms\Model\Page;
 use Tmvc\Framework\App\Request;
 use Tmvc\Framework\Exception\TmvcException;
 use Tmvc\Framework\Router\RouterInterface;
-use Tmvc\Cms\Model\Page\Collection as CmsPageCollection;
+use Tmvc\Cms\Model\Page\CollectionFactory as CmsPageCollectionFactory;
 use Tmvc\Cms\Helper\Render as CmsRenderHelper;
 
 class Router implements RouterInterface
 {
     /**
-     * @var CmsPageCollection
+     * @var CmsPageCollectionFactory
      */
-    private $cmsPageCollection;
+    private $cmsPageCollectionFactory;
     /**
      * @var CmsRenderHelper
      */
@@ -30,15 +30,15 @@ class Router implements RouterInterface
 
     /**
      * Router constructor.
-     * @param CmsPageCollection $cmsPageCollection
+     * @param CmsPageCollectionFactory $cmsPageCollectionFactory
      * @param CmsRenderHelper $cmsRenderHelper
      */
     public function __construct(
-        CmsPageCollection $cmsPageCollection,
+        CmsPageCollectionFactory $cmsPageCollectionFactory,
         CmsRenderHelper $cmsRenderHelper
     )
     {
-        $this->cmsPageCollection = $cmsPageCollection;
+        $this->cmsPageCollectionFactory = $cmsPageCollectionFactory;
         $this->cmsRenderHelper = $cmsRenderHelper;
     }
 
@@ -52,7 +52,7 @@ class Router implements RouterInterface
     public function route(Request $request, $queryString, \Application $application)
     {
         /* @var \Tmvc\Cms\Model\Page $cmsPageModel */
-        $cmsPageModel = $this->cmsPageCollection->addFieldToFilter('identifier', $queryString)->addFieldToFilter('is_enabled', Page::IS_ENABLED)->getFirstItem();
+        $cmsPageModel = $this->cmsPageCollectionFactory->create()->addFieldToFilter('identifier', $queryString)->addFieldToFilter('is_enabled', Page::IS_ENABLED)->getFirstItem();
         if ($cmsPageModel->getId()) {
             $this->cmsRenderHelper->renderPage($cmsPageModel)->sendResponse();
             return true;

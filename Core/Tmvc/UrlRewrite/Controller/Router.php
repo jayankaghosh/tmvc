@@ -12,24 +12,24 @@ namespace Tmvc\UrlRewrite\Controller;
 
 use Tmvc\Framework\App\Request;
 use Tmvc\Framework\Router\RouterInterface;
-use Tmvc\UrlRewrite\Model\UrlRewrite\Collection;
+use Tmvc\UrlRewrite\Model\UrlRewrite\CollectionFactory;
 
 class Router implements RouterInterface
 {
     /**
-     * @var Collection
+     * @var CollectionFactory
      */
-    private $collection;
+    private $collectionFactory;
 
     /**
      * Router constructor.
-     * @param Collection $collection
+     * @param CollectionFactory $collectionFactory
      */
     public function __construct(
-        Collection $collection
+        CollectionFactory $collectionFactory
     )
     {
-        $this->collection = $collection;
+        $this->collectionFactory = $collectionFactory;
     }
 
     /**
@@ -40,7 +40,8 @@ class Router implements RouterInterface
      */
     public function route(Request $request, $queryString, \Application $application)
     {
-        foreach($this->collection as $item) {
+        $collection = $this->collectionFactory->create();
+        foreach($collection as $item) {
             /* @var \Tmvc\UrlRewrite\Model\UrlRewrite $item */
             if ($item->getRequestPath() === $queryString) {
                 $application->forward($item->getActualPath());
