@@ -84,7 +84,7 @@ class ConfigReader
 
         $modules = $this->moduleManager->getModuleList();
         foreach ($modules as $module) {
-            $configFilePath = $module."/etc/config.php";
+            $configFilePath = $module['path']."/etc/config.php";
             if (file_exists($configFilePath)) {
                 $files[] = $configFilePath;
             }

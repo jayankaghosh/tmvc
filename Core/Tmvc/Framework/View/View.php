@@ -129,7 +129,7 @@ class View
     public function setLayout($layout) {
         $name = explode("::", $layout);
         if (count($name) > 1) {
-            $path = $this->moduleManager->getModule($name[0]) . "/view/" . $name[1];
+            $path = $this->moduleManager->getModule($name[0])['path'] . "/view/" . $name[1];
         } else {
             $path = $name[0];
         }
