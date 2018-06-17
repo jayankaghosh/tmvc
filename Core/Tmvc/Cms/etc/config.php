@@ -3,3 +3,5 @@
 $config->addRoute('index', "GET", \Tmvc\Cms\Controller\Index\Index::class);
 $config->addRoute('noroute', "GET", \Tmvc\Cms\Controller\Noroute\Index::class);
 $config->addRouter(\Tmvc\Cms\Controller\Router::class);
+
+$config->addObserver('view_render_after', \Tmvc\Cms\Observer\ViewRenderAfter::class);
