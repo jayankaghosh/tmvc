@@ -10,36 +10,36 @@
 namespace Tmvc\Cms\Controller;
 
 
-use Tmvc\Cms\Model\Cms;
+use Tmvc\Cms\Model\Page;
 use Tmvc\Framework\App\Request;
-use Tmvc\Framework\App\Response;
 use Tmvc\Framework\Exception\TmvcException;
 use Tmvc\Framework\Router\RouterInterface;
-use Tmvc\Cms\Model\Cms\Collection as CmsCollection;
+use Tmvc\Cms\Model\Page\Collection as CmsPageCollection;
+use Tmvc\Cms\Helper\Render as CmsRenderHelper;
 
 class Router implements RouterInterface
 {
     /**
-     * @var Response
+     * @var CmsPageCollection
      */
-    private $response;
+    private $cmsPageCollection;
     /**
-     * @var CmsCollection
+     * @var CmsRenderHelper
      */
-    private $cmsCollection;
+    private $cmsRenderHelper;
 
     /**
      * Router constructor.
-     * @param Response $response
-     * @param CmsCollection $cmsCollection
+     * @param CmsPageCollection $cmsPageCollection
+     * @param CmsRenderHelper $cmsRenderHelper
      */
     public function __construct(
-        Response $response,
-        CmsCollection $cmsCollection
+        CmsPageCollection $cmsPageCollection,
+        CmsRenderHelper $cmsRenderHelper
     )
     {
-        $this->response = $response;
-        $this->cmsCollection = $cmsCollection;
+        $this->cmsPageCollection = $cmsPageCollection;
+        $this->cmsRenderHelper = $cmsRenderHelper;
     }
 
     /**
@@ -51,13 +51,10 @@ class Router implements RouterInterface
     public function route(Request $request, $queryString, \Application $application)
     {
         try {
-            /* @var \Tmvc\Cms\Model\Cms $cmsModel */
-            $cmsModel = $this->cmsCollection->addFieldToFilter('identifier', $queryString)->addFieldToFilter('is_enabled', Cms::IS_ENABLED)->getFirstItem();
-            if ($cmsModel->getId()) {
-                $this->response
-                    ->setBody($cmsModel->getPageContent())
-                    ->setResponseCode($cmsModel->getResponseCode())
-                    ->sendResponse();
+            /* @var \Tmvc\Cms\Model\Page $cmsPageModel */
+            $cmsPageModel = $this->cmsPageCollection->addFieldToFilter('identifier', $queryString)->addFieldToFilter('is_enabled', Page::IS_ENABLED)->getFirstItem();
+            if ($cmsPageModel->getId()) {
+                $this->cmsRenderHelper->renderPage($cmsPageModel)->sendResponse();
                 return true;
             } else {
                 return false;

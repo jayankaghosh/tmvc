@@ -22,6 +22,8 @@ class View
     private $id;
     private $layout;
     private $block;
+    private $result = "";
+
     /**
      * @var ModuleManager
      */
@@ -83,17 +85,18 @@ class View
         if (!$this->getLayout()) {
             throw new \InvalidArgumentException("No view was initialized");
         }
-        $this->eventManager->dispatch("view_render_before", ['view' => $this]);
-        $this->eventManager->dispatch("view_".$this->getId()."_render_before", ['view' => $this]);
+        $eventParameters = ['view' => $this];
+        $this->eventManager->dispatch("view_render_before", $eventParameters);
+        $this->eventManager->dispatch("view_".$this->getId()."_render_before", $eventParameters);
         $viewRender = \Closure::bind(function ($block) {
             ob_start();
             include $this->getLayout();
             return ob_get_clean();
         }, $this, self::class);
-        $result = call_user_func($viewRender, $this->getBlock());
-        $this->eventManager->dispatch("view_render_after", ['view' => $this, 'result' => $result]);
-        $this->eventManager->dispatch("view_".$this->getId()."_render_after", ['view' => $this, 'result' => $result]);
-        return $result;
+        $this->setResult(call_user_func($viewRender, $this->getBlock()));
+        $this->eventManager->dispatch("view_render_after", $eventParameters);
+        $this->eventManager->dispatch("view_".$this->getId()."_render_after", $eventParameters);
+        return $this->getResult();
     }
 
     /**
@@ -157,5 +160,21 @@ class View
         if (!$block instanceof DataObject) {
             throw new ArgumentMismatchException("Block passed to view ".$this->getId()." should be an instance of ".DataObject::class);
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getResult() {
+        return (string)$this->result;
+    }
+
+    /**
+     * @param string $result
+     * @return $this
+     */
+    public function setResult($result) {
+        $this->result = $result;
+        return $this;
     }
 }

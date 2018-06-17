@@ -7,10 +7,10 @@
  * @link        http://www.codilar.com/
  */
 
-namespace Tmvc\Cms\Model\Cms;
+namespace Tmvc\Cms\Model\Block;
 
 
-use Tmvc\Cms\Model\Cms as Model;
+use Tmvc\Cms\Model\Block as Model;
 use Tmvc\Framework\Model\AbstractCollection;
 
 class Collection extends AbstractCollection

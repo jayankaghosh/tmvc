@@ -12,18 +12,17 @@ namespace Tmvc\Cms\Model;
 
 use Tmvc\Framework\Model\AbstractModel;
 
-class Cms extends AbstractModel
+class Block extends AbstractModel
 {
 
     const IS_ENABLED = 1;
     const IS_NOT_ENABLED = 0;
 
-    const TABLE_NAME = "cms_page";
+    const TABLE_NAME = "cms_block";
 
-    protected $indexField = "cms_page_id";
+    protected $indexField = "cms_block_id";
 
     /**
-     * To be overridden by child classes
      * @return string
      */
     public function getTableName()
@@ -40,7 +39,7 @@ class Cms extends AbstractModel
 
     /**
      * @param string $identifier
-     * @return Cms
+     * @return $this
      */
     public function setIdentifier($identifier) {
         return $this->setData('identifier', $identifier);
@@ -49,31 +48,16 @@ class Cms extends AbstractModel
     /**
      * @return string
      */
-    public function getPageContent() {
-        return $this->getData('page_content');
+    public function getBlockContent() {
+        return $this->getData('block_content');
     }
 
     /**
-     * @param string $pageContent
-     * @return Cms
+     * @param string $blockContent
+     * @return $this
      */
-    public function setPageContent($pageContent) {
-        return $this->setData('page_content', $pageContent);
-    }
-
-    /**
-     * @return int
-     */
-    public function getResponseCode() {
-        return (int)$this->getData('response_code');
-    }
-
-    /**
-     * @param int $pageContent
-     * @return Cms
-     */
-    public function setResponseCode($responseCode) {
-        return $this->setData('response_code', $responseCode);
+    public function setBlockContent($blockContent) {
+        return $this->setData('block_content', $blockContent);
     }
 
     /**
@@ -85,7 +69,7 @@ class Cms extends AbstractModel
 
     /**
      * @param bool $isEnabled
-     * @return Cms
+     * @return $this
      */
     public function setIsEnabled($isEnabled) {
         $isEnabled = $isEnabled ? 1 : 0;
