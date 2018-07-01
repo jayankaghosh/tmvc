@@ -11,14 +11,15 @@ namespace Tmvc\Framework\Router;
 
 
 use Tmvc\Framework\App\Request;
+use Tmvc\Framework\Application\ApplicationInterface;
 
 interface RouterInterface
 {
     /**
      * @param Request $request
      * @param string $queryString
-     * @param \Application $application
+     * @param ApplicationInterface $application
      * @return boolean
      */
-    public function route(Request $request, $queryString, \Application $application);
+    public function route(Request $request, $queryString, ApplicationInterface $application);
 }

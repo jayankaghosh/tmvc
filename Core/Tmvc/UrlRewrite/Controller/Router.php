@@ -11,6 +11,8 @@ namespace Tmvc\UrlRewrite\Controller;
 
 
 use Tmvc\Framework\App\Request;
+use Tmvc\Framework\Application\ApplicationInterface;
+use Tmvc\Framework\Application\Http;
 use Tmvc\Framework\Router\RouterInterface;
 use Tmvc\UrlRewrite\Model\UrlRewrite\CollectionFactory;
 
@@ -35,15 +37,16 @@ class Router implements RouterInterface
     /**
      * @param Request $request
      * @param string $queryString
-     * @param \Application $application
+     * @param ApplicationInterface $application
      * @return boolean
      */
-    public function route(Request $request, $queryString, \Application $application)
+    public function route(Request $request, $queryString, ApplicationInterface $application)
     {
         $collection = $this->collectionFactory->create();
         foreach($collection as $item) {
             /* @var \Tmvc\UrlRewrite\Model\UrlRewrite $item */
             if ($item->getRequestPath() === $queryString) {
+                /** @var Http $application */
                 $application->forward($item->getActualPath());
                 return true;
             }

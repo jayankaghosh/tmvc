@@ -30,7 +30,7 @@ class Router implements RouterInterface {
     /**
      * @param \Tmvc\Framework\App\Request $request
      * @param $queryString
-     * @param Application $application
+     * @param \Tmvc\Framework\Application\ApplicationInterface $application
      * @return boolean
      * @throws \Tmvc\Framework\Exception\ArgumentMismatchException
      * @throws \Tmvc\Framework\Exception\EntityNotFoundException
@@ -39,7 +39,7 @@ class Router implements RouterInterface {
     public function route(
         \Tmvc\Framework\App\Request $request,
         $queryString,
-        Application $application
+        \Tmvc\Framework\Application\ApplicationInterface $application
     ) {
         try {
 

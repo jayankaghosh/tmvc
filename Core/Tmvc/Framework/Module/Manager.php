@@ -14,6 +14,7 @@ use Tmvc\Framework\Cache;
 use Tmvc\Framework\Exception\TmvcException;
 use Tmvc\Framework\Tools\File;
 use Tmvc\Framework\Module\Setup\Manager as SetupManager;
+use Tmvc\Framework\Module\ModuleFactory;
 
 class Manager
 {
@@ -37,22 +38,29 @@ class Manager
      * @var SetupManager
      */
     private $setupManager;
+    /**
+     * @var \Tmvc\Framework\Module\ModuleFactory
+     */
+    private $moduleFactory;
 
     /**
      * Manager constructor.
      * @param Cache $cache
      * @param File $file
      * @param SetupManager $setupManager
+     * @param \Tmvc\Framework\Module\ModuleFactory $moduleFactory
      */
     public function __construct(
         Cache $cache,
         File $file,
-        SetupManager $setupManager
+        SetupManager $setupManager,
+        ModuleFactory $moduleFactory
     )
     {
         $this->cache = $cache;
         $this->file = $file;
         $this->setupManager = $setupManager;
+        $this->moduleFactory = $moduleFactory;
     }
 
     public function manage() {
@@ -64,12 +72,15 @@ class Manager
 
     /**
      * @param $moduleName
-     * @return string|null
+     * @return Module
      */
     public function getModule($moduleName) {
-        return isset($this->getModuleList()[$moduleName]) ? $this->getModuleList()[$moduleName] : null;
+        return isset($this->getModuleList()[$moduleName]) ? $this->getModuleList()[$moduleName] : $this->_prepareModule([]);
     }
 
+    /**
+     * @return Module[]
+     */
     public function getModuleList() {
         if (!$this->_moduleList) {
             $cache = $this->cache->get(self::MODULE_LIST_CACHE_KEY);
@@ -84,8 +95,19 @@ class Manager
                 $this->cache->set(self::MODULE_LIST_CACHE_KEY, $cache);
             }
             $this->_moduleList = \json_decode($cache, true);
+            foreach ($this->_moduleList as $key => $module) {
+                $this->_moduleList[$key] = $this->_prepareModule($module);
+            }
         }
         return $this->_moduleList;
+    }
+
+    /**
+     * @param array $module
+     * @return Module
+     */
+    private function _prepareModule(array $module) {
+        return $this->moduleFactory->create()->setData($module);
     }
 
     private function _getModules($path) {

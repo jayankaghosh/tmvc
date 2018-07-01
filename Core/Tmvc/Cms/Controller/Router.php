@@ -12,6 +12,7 @@ namespace Tmvc\Cms\Controller;
 
 use Tmvc\Cms\Model\Page;
 use Tmvc\Framework\App\Request;
+use Tmvc\Framework\Application\ApplicationInterface;
 use Tmvc\Framework\Exception\TmvcException;
 use Tmvc\Framework\Router\RouterInterface;
 use Tmvc\Cms\Model\Page\CollectionFactory as CmsPageCollectionFactory;
@@ -45,11 +46,11 @@ class Router implements RouterInterface
     /**
      * @param Request $request
      * @param string $queryString
-     * @param \Application $application
+     * @param ApplicationInterface $application
      * @return boolean
      * @throws TmvcException
      */
-    public function route(Request $request, $queryString, \Application $application)
+    public function route(Request $request, $queryString, ApplicationInterface $application)
     {
         /* @var \Tmvc\Cms\Model\Page $cmsPageModel */
         $cmsPageModel = $this->cmsPageCollectionFactory->create()->addFieldToFilter('identifier', $queryString)->addFieldToFilter('is_enabled', Page::IS_ENABLED)->getFirstItem();

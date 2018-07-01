@@ -67,4 +67,8 @@ class Cache
         }
         return self::CACHE_DIR.implode("/", $cacheKeys);
     }
+
+    public function flush() {
+        $this->file->deleteDirectory(self::CACHE_DIR);
+    }
 }

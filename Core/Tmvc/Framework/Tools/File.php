@@ -115,4 +115,51 @@ class File
             return false;
         }
     }
+
+    /**
+     * @param string $dir
+     * @param string|null $regex
+     * @return array
+     */
+    public function getFilesRecursively($path, $regex = null){
+        return $this->_getFilesRecursively($path, $regex);
+    }
+
+    protected function _getFilesRecursively($dir, $regex = null, &$results = []) {
+        $files = scandir($dir);
+        foreach($files as $value){
+            $path = realpath($dir.DIRECTORY_SEPARATOR.$value);
+            if(!is_dir($path)) {
+                $matches = [];
+                if ($regex && !preg_match($regex, $path, $matches)) continue;
+                $results[] = [
+                    'path'    => $path,
+                    'matches' => $matches
+                ];
+            } else if($value != "." && $value != "..") {
+                $this->_getFilesRecursively($path, $regex, $results);
+            }
+        }
+        return $results;
+    }
+
+    public function deleteDirectory($dir) {
+        if (!file_exists($dir)) {
+            return true;
+        }
+        if (!is_dir($dir)) {
+            return unlink($dir);
+        }
+        foreach (scandir($dir) as $item) {
+            if ($item == '.' || $item == '..') {
+                continue;
+            }
+
+            if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+                return false;
+            }
+
+        }
+        return rmdir($dir);
+    }
 }
