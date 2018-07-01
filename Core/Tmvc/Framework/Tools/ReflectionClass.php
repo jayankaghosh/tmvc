@@ -22,6 +22,7 @@ class ReflectionClass
                 $class = new \ReflectionClass($class);
             } catch (\Exception $exception) {
                 self::generateFactoryIfPossible($class);
+                $class = new \ReflectionClass($class);
             }
             $constructor = $class->getConstructor();
             if ($constructor && count($constructor->getParameters())) {

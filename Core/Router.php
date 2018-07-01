@@ -58,27 +58,29 @@ class Router implements RouterInterface {
                 }
             }
 
-            if (
-                ($request->getModule() === $request->getController()) &&
-                ($request->getController() === $request->getAction()) &&
-                ($request->getAction() === "index")
-            ) {
-                $indexPage = array_pad(explode("/", $this->getAppEnv()->read('default_pages.index')), 3, "index");
-                $request
-                    ->setModule($indexPage[0])
-                    ->setController($indexPage[1])
-                    ->setAction($indexPage[2]);
-            }
+            throw new \Tmvc\Framework\Exception\EntityNotFoundException("Controller action not found");
 
-            $route = [
-                $request->getModule(),
-                "Controller",
-                $request->getController(),
-                $request->getAction()
-            ];
-
-            $className = implode("\\", explode(" ", ucwords(implode(" ", $route))));
-            $this->executeController($className, $request);
+//            if (
+//                ($request->getModule() === $request->getController()) &&
+//                ($request->getController() === $request->getAction()) &&
+//                ($request->getAction() === "index")
+//            ) {
+//                $indexPage = array_pad(explode("/", $this->getAppEnv()->read('default_pages.index')), 3, "index");
+//                $request
+//                    ->setModule($indexPage[0])
+//                    ->setController($indexPage[1])
+//                    ->setAction($indexPage[2]);
+//            }
+//
+//            $route = [
+//                $request->getModule(),
+//                "Controller",
+//                $request->getController(),
+//                $request->getAction()
+//            ];
+//
+//            $className = implode("\\", explode(" ", ucwords(implode(" ", $route))));
+//            $this->executeController($className, $request);
         } catch (\Tmvc\Framework\Exception\EntityNotFoundException $entityNotFoundException) {
             if (!$this->initiated) {
                 if (isset(self::getRoutes()['noroute/index/index_'.$request->getMethod()])){
