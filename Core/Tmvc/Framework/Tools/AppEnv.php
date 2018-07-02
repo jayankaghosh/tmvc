@@ -26,7 +26,7 @@ class AppEnv
     )
     {
         if (!VarBucket::read(self::APP_ENV_VAR_KEY)) {
-            $file = $file->load($this->fileName);
+            $file = $file->load(PROJECT_ROOT_PATH.$this->fileName);
             if (!$file instanceof File) {
                 throw new TmvcException($this->fileName." not found");
             } else {
