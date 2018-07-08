@@ -57,7 +57,12 @@ class Cache
     }
 
     public function delete($cacheKey) {
-        $this->file->load($this->_formCacheFilePath($cacheKey))->delete();
+        $cache = $this->_formCacheFilePath($cacheKey);
+        if (is_file($cache)) {
+            $this->file->load($cache)->delete();
+        } else if (is_dir($cache)) {
+            $this->file->deleteDirectory($cache);
+        }
     }
 
     private function _formCacheFilePath($cacheKey) {
