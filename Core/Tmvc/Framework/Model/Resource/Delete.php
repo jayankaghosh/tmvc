@@ -10,7 +10,7 @@
 namespace Tmvc\Framework\Model\Resource;
 
 
-class Delete
+class Delete extends Raw
 {
     protected $tableName;
     protected $idField;

@@ -9,7 +9,7 @@
 
 namespace Tmvc\Framework\Model\Resource;
 
-class Select
+class Select extends Raw
 {
     protected $tableName;
     protected $fields;
@@ -45,6 +45,14 @@ class Select
         if (is_string($value)) {
             $value = "'$value'";
         }
+
+        if ($field instanceof Raw) {
+            $field = $field->__toString();
+        }
+        if ($value instanceof Raw) {
+            $value = $value->__toString();
+        }
+
         if (is_string($field) && !$value) {
             $this->conditions[] = $field;
         } else if (is_string($field) && !is_array($value)){

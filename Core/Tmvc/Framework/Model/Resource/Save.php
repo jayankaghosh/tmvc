@@ -10,7 +10,7 @@
 namespace Tmvc\Framework\Model\Resource;
 
 
-class Save
+class Save extends Raw
 {
     protected $tableName;
     protected $data;

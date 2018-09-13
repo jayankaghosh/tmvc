@@ -74,7 +74,7 @@ class Db
             }
             $result = ObjectManager::create(Result::class, ["result" => $result]);
         } else {
-            throw new TmvcException("MYSQL ERROR: ".$this->getConnection()->error);
+            throw new TmvcException("MYSQL ERROR: ".$this->getConnection()->error.". QUERY WAS : $query");
         }
 
         return $result;

@@ -101,7 +101,9 @@ abstract class AbstractCollection extends DataObject implements \IteratorAggrega
             $items = $this->_result->getItems();
             $data = [];
             foreach ($items as $item) {
-                $data[] = $this->_getNewModelInstance()->setData($item->getData());
+                $this->itemLoadBefore($item);
+                $item = $this->_getNewModelInstance()->setData($item->getData());
+                $data[] = $this->itemLoadAfter($item);
             }
             $this->setData($data);
             $this->_loaded = true;
@@ -110,12 +112,31 @@ abstract class AbstractCollection extends DataObject implements \IteratorAggrega
     }
 
     /**
+     * @param DataObject $item
+     * @return DataObject
+     */
+    protected function itemLoadBefore($item) {
+        return $item;
+    }
+
+    /**
+     * @param AbstractModel $item
+     * @return AbstractModel
+     */
+    protected function itemLoadAfter($item) {
+        return $item;
+    }
+
+    /**
      * @return AbstractModel
      * @throws \Tmvc\Framework\Exception\TmvcException
      */
     public function getFirstItem() {
         $this->load();
-        return $this->_getNewModelInstance()->setData($this->_result->getFirstItem()->getData());
+        $data = $this->_result->getFirstItem()->getData();
+        $this->itemLoadBefore($data);
+        $item = $this->_getNewModelInstance()->setData($data);
+        return $this->itemLoadAfter($item);
     }
 
     /**
@@ -124,7 +145,10 @@ abstract class AbstractCollection extends DataObject implements \IteratorAggrega
      */
     public function getLastItem() {
         $this->load();
-        return $this->_getNewModelInstance()->setData($this->_result->getLastItem()->getData());
+        $data = $this->_result->getLastItem()->getData();
+        $this->itemLoadBefore($data);
+        $item = $this->_getNewModelInstance()->setData($data);
+        return $this->itemLoadAfter($item);
     }
 
     /**

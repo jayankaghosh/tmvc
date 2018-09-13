@@ -10,7 +10,7 @@
 namespace Tmvc\Framework\Model\Resource;
 
 
-class Table
+class Table extends Raw
 {
 
     /**

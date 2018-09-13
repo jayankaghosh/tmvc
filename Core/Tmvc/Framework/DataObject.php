@@ -12,7 +12,7 @@ namespace Tmvc\Framework;
 
 use Tmvc\Framework\Exception\TmvcException;
 
-class DataObject
+class DataObject implements \JsonSerializable
 {
 
     protected $data = [];
@@ -108,4 +108,15 @@ class DataObject
         return implode('_', $ret);
     }
 
+    /**
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    public function jsonSerialize()
+    {
+        return $this->data;
+    }
 }

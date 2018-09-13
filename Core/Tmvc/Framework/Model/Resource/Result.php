@@ -33,7 +33,7 @@ class Result
     }
 
     /**
-     * @return array
+     * @return DataObject[]
      */
     public function getItems() {
         if (!$this->data) {
