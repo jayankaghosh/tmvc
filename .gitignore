@@ -2,3 +2,4 @@ app/
 var/
 app_env.json
 .idea
+vendor/

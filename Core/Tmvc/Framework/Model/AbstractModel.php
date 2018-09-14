@@ -51,22 +51,25 @@ abstract class AbstractModel extends DataObject
      * @var Cache
      */
     private $cache;
+    /**
+     * @var Context
+     */
+    private $context;
 
     /**
      * AbstractModel constructor.
-     * @param EventManager $eventManager
-     * @param Cache $cache
+     * @param Context $context
      * @throws TmvcException
      */
     public function __construct(
-        EventManager $eventManager,
-        Cache $cache
+        Context $context
     )
     {
+        $this->context = $context;
         $this->dbConn = VarBucket::read(Db::DB_CONNECTION_VAR_KEY);
         $this->select = ObjectManager::create(Select::class, ["tableName" => $this->getTableName()]);
-        $this->eventManager = $eventManager;
-        $this->cache = $cache;
+        $this->eventManager = $this->context->getEventManager();
+        $this->cache = $this->context->getCache();
     }
 
     /**
@@ -255,5 +258,13 @@ abstract class AbstractModel extends DataObject
             "model" =>  $this,
             static::EVENT_PREFIX  => $this
         ];
+    }
+
+    /**
+     * @return Context
+     */
+    public function getContext(): Context
+    {
+        return $this->context;
     }
 }

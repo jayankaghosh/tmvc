@@ -11,6 +11,7 @@ namespace Tmvc\Framework\Model;
 
 
 use Tmvc\Framework\DataObject;
+use Tmvc\Framework\Model\Collection\Context;
 use Tmvc\Framework\Model\Collection\Iterator;
 use Tmvc\Framework\Model\Resource\Db;
 use Tmvc\Framework\Model\Resource\Result;
@@ -40,18 +41,23 @@ abstract class AbstractCollection extends DataObject implements \IteratorAggrega
      * @var Result
      */
     private $_result;
+    /**
+     * @var Context
+     */
+    private $context;
 
 
     /**
      * AbstractCollection constructor.
-     * @param Db $db
+     * @param Context $context
      * @throws \Tmvc\Framework\Exception\TmvcException
      */
     public function __construct(
-        Db $db
+        Context $context
     )
     {
-        $this->_db = $db;
+        $this->context = $context;
+        $this->_db = $this->context->getDb();
         /* @var AbstractModel $model */
         $model = ObjectManager::get($this->getModelName());
         $this->_select = ObjectManager::create(Select::class, [
@@ -178,5 +184,13 @@ abstract class AbstractCollection extends DataObject implements \IteratorAggrega
     {
         $this->load();
         return parent::getData($key, $default);
+    }
+
+    /**
+     * @return Context
+     */
+    public function getContext(): Context
+    {
+        return $this->context;
     }
 }

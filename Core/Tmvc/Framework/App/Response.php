@@ -29,6 +29,11 @@ class Response
     private $body = "";
 
     /**
+     * @var string
+     */
+    private $redirect = "";
+
+    /**
      * @param string $body
      * @return $this
      */
@@ -71,7 +76,11 @@ class Response
             header("$headerKey: $headerValue");
         }
         http_response_code($this->getResponseCode());
-        echo $this->getBody();
+        if ($this->getRedirect()) {
+            header("Location: ".$this->getRedirect());
+        } else {
+            echo $this->getBody();
+        }
     }
 
     /**
@@ -98,5 +107,23 @@ class Response
     public function getBody()
     {
         return $this->body;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRedirect()
+    {
+        return $this->redirect;
+    }
+
+    /**
+     * @param string $redirect
+     * @return $this
+     */
+    public function setRedirect(string $redirect)
+    {
+        $this->redirect = $redirect;
+        return $this;
     }
 }

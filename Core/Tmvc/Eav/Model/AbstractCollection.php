@@ -10,8 +10,8 @@
 namespace Tmvc\Eav\Model;
 
 
+use Tmvc\Eav\Model\Collection\Context;
 use Tmvc\Eav\Model\Eav\AttributeLoader;
-use Tmvc\Framework\Model\Resource\Db;
 
 abstract class AbstractCollection extends \Tmvc\Framework\Model\AbstractCollection
 {
@@ -24,17 +24,15 @@ abstract class AbstractCollection extends \Tmvc\Framework\Model\AbstractCollecti
 
     /**
      * AbstractCollection constructor.
-     * @param Db $db
-     * @param AttributeLoader $attributeLoader
+     * @param Collection\Context $context
      * @throws \Tmvc\Framework\Exception\TmvcException
      */
     public function __construct(
-        Db $db,
-        AttributeLoader $attributeLoader
+        Context $context
     )
     {
-        parent::__construct($db);
-        $this->attributeLoader = $attributeLoader;
+        parent::__construct($context);
+        $this->attributeLoader = $context->getAttributeLoader();
     }
 
     protected function itemLoadAfter($item)
