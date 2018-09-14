@@ -188,12 +188,17 @@ abstract class AbstractModel extends DataObject
         ]);
         $result = $this->getConnection()->query($query);
 
+        if (!$this->getId()){
+            $this->setData($this->indexField, $result->getLastInsertId());
+        }
+
         $this->afterSave();
 
         $this->eventManager->dispatch("model_save_after", $this->getEventParameters());
         $this->eventManager->dispatch(static::EVENT_PREFIX."_save_after", $this->getEventParameters());
 
-        return $this->getId() ? $this : $this->setData($this->indexField, $result->getLastInsertId());
+
+        return $this;
     }
 
     protected function afterSave() {
