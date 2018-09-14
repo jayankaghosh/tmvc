@@ -104,12 +104,12 @@ abstract class AbstractModel extends DataObject
     public function getSchema() {
         if (!$this->schema) {
             $cacheKey = self::CACHE_KEY . "_" . $this->getTableName();
-            $schema = \json_decode($this->cache->get($cacheKey), TRUE);
+            $schema = $this->cache->get($cacheKey);
             if (!$schema) {
                 $schema = \json_encode($this->getConnection()->query("DESCRIBE " . $this->getTableName())->getItems());
                 $this->cache->set($cacheKey, $schema);
             }
-            $this->schema = $schema;
+            $this->schema = \json_decode($schema, TRUE);
         }
         return $this->schema;
     }
