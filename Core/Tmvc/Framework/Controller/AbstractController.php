@@ -33,6 +33,16 @@ abstract class AbstractController
     private $urlBuilder;
 
     /**
+     * @var View/Response
+     */
+    private $dispatcher = null;
+
+    /**
+     * @var boolean
+     */
+    private $dispatched = false;
+
+    /**
      * AbstractController constructor.
      * @param Context $context
      */
@@ -74,5 +84,41 @@ abstract class AbstractController
     public function getUrlBuilder(): Url
     {
         return $this->urlBuilder;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDispatched(): bool
+    {
+        return $this->dispatched;
+    }
+
+    /**
+     * @param bool $dispatched
+     * @return $this
+     */
+    public function setDispatched(bool $dispatched)
+    {
+        $this->dispatched = $dispatched;
+        return $this;
+    }
+
+    /**
+     * @param View|Response $dispatcher
+     * @return $this
+     */
+    public function setDispatcher($dispatcher)
+    {
+        $this->dispatcher = $dispatcher;
+        return $this;
+    }
+
+    /**
+     * @return View|Response
+     */
+    public function getDispatcher()
+    {
+        return $this->dispatcher;
     }
 }

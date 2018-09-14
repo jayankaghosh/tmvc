@@ -117,6 +117,9 @@ class Manager
             try {
                 $path = realpath($file);
                 $definition = $this->getDefinition($path);
+                if (!$definition['active']) {
+                    return;
+                }
                 $moduleName = $definition['name'];
                 $modules[$moduleName] = $definition;
                 $modules[$moduleName]["path"] = $path;

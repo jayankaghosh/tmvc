@@ -14,7 +14,7 @@ use Tmvc\Framework\Tools\File;
 
 class Cache
 {
-    const CACHE_DIR = __DIR__."/../../../var/cache/";
+    const CACHE_DIR = PROJECT_ROOT_PATH."var/cache/";
     /**
      * @var File
      */
