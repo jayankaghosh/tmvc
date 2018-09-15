@@ -1,0 +1,28 @@
+<?php
+/** @var \Tmvc\Cms\Block\Backend\Cms\Page\View $block */
+?>
+<table class="table table-striped table-bordered grid">
+    <thead>
+        <tr>
+            <th><?php echo "ID" ?></th>
+            <th><?php echo "Identifier" ?></th>
+            <th><?php echo "Response Code" ?></th>
+            <th><?php echo "Is Enabled" ?></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($block->getCollection() as $page): ?>
+            <?php /** @var \Tmvc\Cms\Model\Page $page */ ?>
+            <tr>
+                <td><?php echo $page->getData('cms_page_id') ?></td>
+                <td><?php echo $page->getData('identifier') ?></td>
+                <td><?php echo $page->getData('response_code') ?></td>
+                <td><?php echo $page->getData('is_enabled') ? "Yes" : "No" ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+
+<script>
+    $('table.grid').DataTable();
+</script>

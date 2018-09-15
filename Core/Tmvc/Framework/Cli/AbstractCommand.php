@@ -49,7 +49,12 @@ abstract class AbstractCommand implements CommandInterface
         return "Default Command Description";
     }
 
-    abstract function run(Request $request, Response $response);
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return void
+     */
+    abstract public function run(Request $request, Response $response);
 
     /**
      * @param string $name

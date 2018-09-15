@@ -1,0 +1,2 @@
+RewriteEngine on
+RewriteRule . get.php [L,QSA]

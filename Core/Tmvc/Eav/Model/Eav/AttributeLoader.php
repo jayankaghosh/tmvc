@@ -23,7 +23,7 @@ use Tmvc\Framework\Model\Resource\Table;
 
 class AttributeLoader
 {
-    const ATTRIBUTES_CACHE_KEY = "eav_attributes";
+    const ATTRIBUTES_CACHE_KEY = "tmvc_eav_attributes";
 
     /**
      * @var AttributeCollectionFactory
@@ -108,12 +108,12 @@ class AttributeLoader
                 )
             );
 
-            if (is_array($attributesToFetch)) {
+            if (is_array($attributesToFetch) && count($attributesToFetch)) {
                 foreach ($attributesToFetch as $key => $attributeToFetch) {
                     $attributesToFetch[$key] = '"'.$attributeToFetch.'"';
                 }
                 $attributesToFetch = implode(",", $attributesToFetch);
-                $attributeCollection->addFieldToFilter("attribute_code IN ($attributesToFetch)");
+                $attributeCollection->addFieldToFilter(new Raw("`attribute_code` IN ($attributesToFetch)"));
             }
 
             $attributes = $attributeCollection->getData();

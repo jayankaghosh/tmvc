@@ -1,0 +1,15 @@
+<?php
+/** @var \Tmvc\Backend\Block\Backend $block */
+?>
+<link href="<?php echo $block->getPubUrl("menu/css/menu.css") ?>" rel="stylesheet">
+
+<ul class="sidebar navbar-nav section menu">
+    <?php foreach($block->getMenuSections() as $menuSection): ?>
+        <?php echo $block->getSectionHtml($menuSection) ?>
+    <?php endforeach; ?>
+</ul>
+
+<script src="<?php echo $block->getPubUrl("menu/js/menu.js") ?>"></script>
+<script type="text/javascript">
+    $('.section.menu').menu({});
+</script>

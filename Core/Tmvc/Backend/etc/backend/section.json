@@ -1,0 +1,10 @@
+{
+  "sections": [
+    {
+      "id": "dashboard",
+      "section": "Tmvc\\Backend\\Block\\Backend\\Sections\\Dashboard",
+      "sort_order": 1000,
+      "parent": null
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+.section.menu ul {
+    list-style: none;
+}
+.section.menu ul.child {
+    position:relative;
+    padding-left: 10px;
+}
+.section.menu .active {
+    background: #414549;
+}
