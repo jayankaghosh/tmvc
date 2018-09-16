@@ -4,10 +4,10 @@
 <ol class="breadcrumb">
     <?php foreach ($block->getBreadCrumbs() as $breadCrumb): ?>
         <?php if ($breadCrumb->getId() === $block->getCurrentSection()->getId()): ?>
-            <li class="breadcrumb-item active"><?php echo $breadCrumb->getSectionName() ?></li>
+            <li class="breadcrumb-item active"><?php echo $breadCrumb->getLabel() ?></li>
         <?php else: ?>
             <li class="breadcrumb-item">
-                <a href="<?php echo $block->getSectionUrl($breadCrumb) ?>"><?php echo $breadCrumb->getSectionName() ?></a>
+                <a href="<?php echo $block->getSectionUrl($breadCrumb) ?>"><?php echo $breadCrumb->getLabel() ?></a>
             </li>
         <?php endif; ?>
     <?php endforeach; ?>

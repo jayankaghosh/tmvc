@@ -13,12 +13,12 @@ namespace Tmvc\Backend\Block\Section;
 class SectionPool
 {
     /**
-     * @var AbstractSection[]
+     * @var Section[]
      */
     private $sections;
 
     /**
-     * @var AbstractSection[]
+     * @var Section[]
      */
     private $sectionCache = [];
 
@@ -28,7 +28,7 @@ class SectionPool
     }
 
     /**
-     * @return AbstractSection[]
+     * @return Section[]
      */
     public function getSections()
     {
@@ -37,7 +37,7 @@ class SectionPool
 
     /**
      * @param $sectionId
-     * @return null|AbstractSection
+     * @return null|Section
      */
     public function getSection($sectionId) {
         if (!array_key_exists($sectionId, $this->sectionCache)) {
@@ -48,8 +48,8 @@ class SectionPool
 
     /**
      * @param string $sectionId
-     * @param AbstractSection|null $parentSection
-     * @return null|AbstractSection
+     * @param Section|null $parentSection
+     * @return null|Section
      */
     protected function _getSection($sectionId, $parentSection) {
         $sections = $parentSection ? $parentSection->getChildren() : $this->getSections();
@@ -67,10 +67,10 @@ class SectionPool
     }
 
     /**
-     * @param AbstractSection $section
+     * @param Section $section
      * @return $this
      */
-    public function addSection(AbstractSection $section)
+    public function addSection(Section $section)
     {
         $this->sections[] = $section;
         return $this;

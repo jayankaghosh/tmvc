@@ -120,7 +120,7 @@ class SectionReader
      * @param $section
      */
     protected function validateSection($section) {
-        $fields = ["id", "section", "parent", "sort_order"];
+        $fields = ["id", "label", "block", "template", "parent", "sort_order"];
         foreach ($fields as $field) {
             if (!array_key_exists($field, $section)) {
                 throw new TmvcException("section.json corrupted. $field is required");

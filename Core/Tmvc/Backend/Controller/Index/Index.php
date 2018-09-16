@@ -30,6 +30,10 @@ class Index extends AbstractAction
      * @var Response
      */
     private $response;
+    /**
+     * @var Backend
+     */
+    private $backend;
 
     /**
      * Index constructor.
@@ -37,18 +41,21 @@ class Index extends AbstractAction
      * @param Session $session
      * @param Response $response
      * @param SectionPool $sectionPool
+     * @param Backend $backend
      * @throws TmvcException
      */
     public function __construct(
         Context $context,
         Session $session,
         Response $response,
-        SectionPool $sectionPool
+        SectionPool $sectionPool,
+        Backend $backend
     )
     {
         parent::__construct($context, $session, $response);
         $this->sectionPool = $sectionPool;
         $this->response = $response;
+        $this->backend = $backend;
     }
 
     /**
@@ -58,9 +65,20 @@ class Index extends AbstractAction
      */
     public function execute(Request $request)
     {
-        if (!$this->sectionPool->getSection($request->getParam('section'))) {
+        $currentSection = $this->getCurrentSection($request);
+        if (!$currentSection) {
             return $this->response->setRedirect($this->getUrlBuilder()->getUrl('*', ['section' => 'dashboard']));
+        } else if ($request->getParam('isAjax')) {
+            $data = [
+                'status'    =>  true,
+                'message'   =>  $this->backend->loadSectionContent()
+            ];
+            return $this->response->setBody(\json_encode($data))->addHeader('Content-Type', "application/json");
         }
         return $this->getView()->loadView("backend", "Tmvc_Backend::backend.phtml", Backend::class);
+    }
+
+    protected function getCurrentSection(Request $request) {
+        return $this->sectionPool->getSection($request->getParam('section'));
     }
 }

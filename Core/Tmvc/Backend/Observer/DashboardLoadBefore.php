@@ -10,12 +10,12 @@
 namespace Tmvc\Backend\Observer;
 
 
-use Tmvc\Backend\Block\Section\AbstractSection;
+use Tmvc\Backend\Block\Section\Section;
 use Tmvc\Backend\Block\Section\SectionPool;
 use Tmvc\Backend\Model\SectionReader;
 use Tmvc\Framework\Event\ObserverInterface;
 use Tmvc\Framework\Exception\TmvcException;
-use Tmvc\Framework\Tools\ObjectManager;
+use Tmvc\Backend\Block\Section\SectionFactory;
 
 class DashboardLoadBefore implements ObserverInterface
 {
@@ -27,19 +27,26 @@ class DashboardLoadBefore implements ObserverInterface
      * @var SectionPool
      */
     private $sectionPool;
+    /**
+     * @var SectionFactory
+     */
+    private $sectionFactory;
 
     /**
      * DashboardLoadBefore constructor.
      * @param SectionReader $sectionReader
      * @param SectionPool $sectionPool
+     * @param SectionFactory $sectionFactory
      */
     public function __construct(
         SectionReader $sectionReader,
-        SectionPool $sectionPool
+        SectionPool $sectionPool,
+        SectionFactory $sectionFactory
     )
     {
         $this->sectionReader = $sectionReader;
         $this->sectionPool = $sectionPool;
+        $this->sectionFactory = $sectionFactory;
     }
 
     /**
@@ -57,17 +64,25 @@ class DashboardLoadBefore implements ObserverInterface
 
     /**
      * @param array $section
-     * @return AbstractSection
+     * @return Section
      * @throws TmvcException
      */
     protected function buildSection($section) {
-        $sectionObj = ObjectManager::create($section['section'], ['id' => $section['id']]);
-        if (!$sectionObj instanceof AbstractSection) {
-            throw new TmvcException("Error in backend section ".get_class($sectionObj).". All sections must extends ".AbstractSection::class);
-        }
+        $children = [];
         foreach ($section['children'] as $child) {
-            $sectionObj->addChild($this->buildSection($child));
+            $children[] = $this->buildSection($child);
         }
-        return $sectionObj;
+        $params = [
+            'id'        =>  $section['id'],
+            'block'     =>  $section['block'],
+            'template'  =>  $section['template'],
+            'children'  =>  $children,
+            'sortOrder' =>  $section['sort_order'],
+            'label'     =>  $section['label']
+        ];
+        if (array_key_exists("icon_class", $section)) {
+            $params['iconClass'] = $section['icon_class'];
+        }
+        return $this->sectionFactory->create($params);
     }
 }

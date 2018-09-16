@@ -120,7 +120,7 @@ class Http implements ApplicationInterface
             }
 
             /* Remove GET Params from query string */
-            $queryString = str_replace("?".urldecode(http_build_query($_GET)), "", $queryString);
+            $queryString = str_replace("?".strtolower(urldecode(http_build_query($_GET))), "", $queryString);
 
             $queryParameters = array_filter(explode("/", $queryString));
             $params = $_GET;

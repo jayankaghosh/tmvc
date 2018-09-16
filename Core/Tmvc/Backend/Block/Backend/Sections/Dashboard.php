@@ -9,38 +9,7 @@
 
 namespace Tmvc\Backend\Block\Backend\Sections;
 
-
-use Tmvc\Backend\Block\Section\AbstractSection;
-
 class Dashboard extends AbstractSection
 {
 
-    /**
-     * @return string
-     */
-    public function getTemplate()
-    {
-        return "Tmvc_Backend::backend/dashboard.phtml";
-    }
-
-    /**
-     * @return string
-     */
-    public function getBlock()
-    {
-        return \Tmvc\Backend\Block\Backend\Dashboard::class;
-    }
-
-    /**
-     * @return string
-     */
-    public function getSectionName()
-    {
-        return "Dashboard";
-    }
-
-    public function getIconClass()
-    {
-        return "fa-tachometer-alt";
-    }
 }

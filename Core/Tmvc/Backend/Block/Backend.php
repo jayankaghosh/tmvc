@@ -9,12 +9,12 @@
 
 namespace Tmvc\Backend\Block;
 
-
-use Tmvc\Backend\Block\Section\AbstractSection;
+use Tmvc\Backend\Block\Section\Section;
 use Tmvc\Backend\Block\Section\SectionPool;
 use Tmvc\Framework\App\Request;
 use Tmvc\Framework\DataObject;
 use Tmvc\Framework\Tools\AppEnv;
+use Tmvc\Framework\Tools\ObjectManager;
 use Tmvc\Framework\Tools\Url;
 use Tmvc\Framework\View\View;
 
@@ -69,25 +69,25 @@ class Backend extends DataObject
     }
 
     /**
-     * @return Section\AbstractSection[]
+     * @return Section[]
      */
     public function getMenuSections() {
         return $this->sectionPool->getSections();
     }
 
     /**
-     * @return null|AbstractSection
+     * @return null|Section
      */
     public function getCurrentSection() {
         return $this->sectionPool->getSection($this->request->getParam('section'));
     }
 
     /**
-     * @param AbstractSection $section
-     * @param AbstractSection[] $parents
+     * @param Section $section
+     * @param Section[] $parents
      * @return string
      */
-    public function getSectionUrl(AbstractSection $section, $parents = []) {
+    public function getSectionUrl(Section $section, $parents = []) {
         $sectionIdentifier = [];
         foreach ($parents as $parent) {
             $sectionIdentifier[] = $parent->getId();
@@ -97,7 +97,7 @@ class Backend extends DataObject
     }
 
     /**
-     * @return AbstractSection[]
+     * @return Section[]
      */
     public function getBreadCrumbs() {
         $path = explode('/', $this->request->getParam('p'));
@@ -113,14 +113,14 @@ class Backend extends DataObject
     }
 
     /**
-     * @param AbstractSection $section
-     * @param AbstractSection[] $parents
+     * @param Section $section
+     * @param Section[] $parents
      * @param int $level
      * @return string
      */
-    public function getSectionHtml(AbstractSection $section, $parents = [], $level = 1) {
+    public function getSectionHtml(Section $section, $parents = [], $level = 1) {
         $html = '<li class="nav-item '.$section->getId().'" data-level='.$level.'>';
-        $html .= '<a class="nav-link" href="'.$this->getSectionUrl($section, $parents).'"><i class="fas fa-fw '.$section->getIconClass().'"></i><span>'.$section->getSectionName().'</span></a>';
+        $html .= '<a class="nav-link" href="'.$this->getSectionUrl($section, $parents).'"><i class="fas fa-fw '.$section->getIconClass().'"></i><span>'.$section->getLabel().'</span></a>';
         if ($section->hasChildren()) {
             $html .= '<ul class="child level-'.$level.'">';
             foreach ($section->getChildren() as $child) {
@@ -134,7 +134,8 @@ class Backend extends DataObject
 
     public function loadSectionContent() {
         $currentSection = $this->getCurrentSection();
-        return $this->view->loadSection($currentSection->getId(), $currentSection->getTemplate(), $currentSection->getBlock());
+        $block = ObjectManager::create($currentSection->getBlock(), ['currentSection' => $currentSection]);
+        return $this->view->loadSection($currentSection->getId(), $currentSection->getTemplate(), $block);
     }
 
     public function getAppName() {
