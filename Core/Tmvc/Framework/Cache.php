@@ -10,6 +10,7 @@
 namespace Tmvc\Framework;
 
 
+use Tmvc\Framework\Tools\Crypto\Encryptor;
 use Tmvc\Framework\Tools\File;
 
 class Cache
@@ -19,16 +20,23 @@ class Cache
      * @var File
      */
     private $file;
+    /**
+     * @var Encryptor
+     */
+    private $encryptor;
 
     /**
      * Cache constructor.
      * @param File $file
+     * @param Encryptor $encryptor
      */
     public function __construct(
-        File $file
+        File $file,
+        Encryptor $encryptor
     )
     {
         $this->file = $file;
+        $this->encryptor = $encryptor;
     }
 
     /**
@@ -68,7 +76,7 @@ class Cache
     private function _formCacheFilePath($cacheKey) {
         $cacheKeys = explode("_", $cacheKey);
         foreach ($cacheKeys as &$cacheKey) {
-            $cacheKey = md5($cacheKey);
+            $cacheKey = $this->encryptor->encrypt($cacheKey);
         }
         return self::CACHE_DIR.implode("/", $cacheKeys);
     }

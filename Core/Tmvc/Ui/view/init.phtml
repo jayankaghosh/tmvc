@@ -1,5 +1,6 @@
 <?php
 /** @var \Tmvc\Ui\Block\Init $block */
+/** @var \Tmvc\Framework\View\View $this */
 ?>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,6 +14,8 @@
 
 <link href="<?php echo $block->getUrlBuilder()->getPubUrl("Tmvc_Ui/lib/css/datatables/dataTables.bootstrap4.min.css") ?>" rel="stylesheet">
 
+    <link href="<?php echo $block->getUrlBuilder()->getPubUrl("Tmvc_Ui/lib/css/Toastr.min.css") ?>" rel="stylesheet">
+
 <script>
     var PUB_BASE_URL = "<?php echo $block->getUrlBuilder()->getPubUrl('') ?>";
 </script>
@@ -23,7 +26,8 @@
             "jquery"        : "Tmvc_Ui/lib/js/jquery.min",
             "bootstrap"     : "Tmvc_Ui/lib/js/bootstrap.bundle.min",
             "chart"         : "Tmvc_Ui/lib/js/Chart",
-            "datatables"    : "Tmvc_Ui/lib/js/jquery/datatables/jquery.dataTables.min"
+            "datatables"    : "Tmvc_Ui/lib/js/jquery/datatables/jquery.dataTables.min",
+            "toastr"        : "Tmvc_Ui/lib/js/Toastr"
         },
         "shim" : {
             "bootstrap" : ["jquery"],
@@ -39,3 +43,5 @@
         'bootstrap'
     ], function() {});
 </script>
+
+<?php echo $this->loadSection("messages", "Tmvc_Ui::messages/init.phtml", \Tmvc\Ui\Block\Messages\Init::class) ?>

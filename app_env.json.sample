@@ -15,5 +15,9 @@
   "default_pages": {
       "index": [ROUTE_TO_INDEX_PAGE],
       "404": [ROUTE_TO_404_PAGE]
+  },
+  "crypto": {
+      "key": "0584bd8085fcb6ac9c701fdb070cffae",
+      "iv": "0584bd8085fcb6ac9c701fdb070cffae"
   }
 }

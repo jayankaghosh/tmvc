@@ -1,0 +1,20 @@
+{
+  "sections": [
+    {
+      "id": "system",
+      "label": "System",
+      "block": "",
+      "template": "",
+      "sort_order": 9000,
+      "parent": null
+    },
+    {
+      "id": "cache",
+      "label": "Cache Management",
+      "block": "Tmvc\\Framework\\Cache\\Block\\Backend\\Section\\Cache",
+      "template": "Tmvc_Framework::backend/section/cache.phtml",
+      "sort_order": 9000,
+      "parent": "system"
+    }
+  ]
+}

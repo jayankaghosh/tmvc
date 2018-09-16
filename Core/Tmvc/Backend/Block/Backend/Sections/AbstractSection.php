@@ -38,7 +38,7 @@ class AbstractSection extends DataObject
      */
     public function __construct(
         Context $context,
-        Section $currentSection
+        $currentSection
     )
     {
         $this->context = $context;

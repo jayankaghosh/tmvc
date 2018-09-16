@@ -202,4 +202,26 @@ class File
         }
         return rmdir($dir);
     }
+
+    public function getStructure($dir, $excludedFiles = [".", ".."])
+    {
+        $tree = [];
+        if($handler = opendir($dir))
+        {
+            while (($content = readdir($handler)) !== FALSE)
+            {
+                if (!in_array($content, $excludedFiles))
+                {
+                    if(is_file($dir."/".$content)) {
+                        $tree[] = $content;
+                    }
+                    else if(is_dir($dir."/".$content)) {
+                        $tree[$content] = $this->getStructure($dir."/".$content, $excludedFiles);
+                    }
+                }
+            }
+            closedir($handler);
+        }
+        return $tree;
+    }
 }

@@ -58,6 +58,10 @@ class Url
         return (string)$this->baseUrl;
     }
 
+    public function getRefererUrl($fallback = "*") {
+        return $_SERVER['HTTP_REFERER'] ? $_SERVER['HTTP_REFERER'] : $this->getUrl($fallback);
+    }
+
     /**
      * @param string $route
      * @param array $params

@@ -1,0 +1,25 @@
+<?php
+/** @var \Tmvc\Framework\Cache\Block\Backend\Section\Cache $block */
+?>
+<div class="card mb-3">
+    <form id="cache-management-form" method="post" action="<?php echo $block->getUrlBuilder()->getUrl('*/cache/clean') ?>">
+        <div class="card-header"><?php echo "Cache Management" ?></div>
+        <div class="card-body">
+            <?php echo $block->getCacheTreeHtml() ?>
+        </div>
+        <div class="card-footer">
+            <button class="btn btn-primary"><?php echo "Clean Cache" ?></button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    require([
+        'jquery'
+    ], function ($) {
+
+        $('#cache-management-form').on('input', 'input.cache-key-input', function () {
+            var childCacheInputs = $(this).closest('li.cache-key'). find('ul.cache-node .cache-key-input');
+            childCacheInputs.prop("checked", $(this).prop("checked"));
+        });
+    });
+</script>

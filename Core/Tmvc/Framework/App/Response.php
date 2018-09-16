@@ -34,10 +34,14 @@ class Response
     private $redirect = "";
 
     /**
-     * @param string $body
+     * @param string|array $body
      * @return $this
      */
     public function setBody($body) {
+        if (is_array($body)) {
+            $body = \json_encode($body);
+            $this->addHeader('Content-Type', 'application/json');
+        }
         $this->body = $body;
         return $this;
     }
