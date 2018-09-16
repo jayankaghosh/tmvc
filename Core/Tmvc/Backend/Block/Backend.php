@@ -17,6 +17,7 @@ use Tmvc\Framework\Tools\AppEnv;
 use Tmvc\Framework\Tools\ObjectManager;
 use Tmvc\Framework\Tools\Url;
 use Tmvc\Framework\View\View;
+use Tmvc\Ui\Helper\UiHelper;
 
 class Backend extends DataObject
 {
@@ -40,6 +41,10 @@ class Backend extends DataObject
      * @var AppEnv
      */
     private $appEnv;
+    /**
+     * @var UiHelper
+     */
+    private $uiHelper;
 
     /**
      * Backend constructor.
@@ -48,13 +53,15 @@ class Backend extends DataObject
      * @param Request $request
      * @param View $view
      * @param AppEnv $appEnv
+     * @param UiHelper $uiHelper
      */
     public function __construct(
         Url $url,
         SectionPool $sectionPool,
         Request $request,
         View $view,
-        AppEnv $appEnv
+        AppEnv $appEnv,
+        UiHelper $uiHelper
     )
     {
         $this->url = $url;
@@ -62,6 +69,7 @@ class Backend extends DataObject
         $this->request = $request;
         $this->view = $view;
         $this->appEnv = $appEnv;
+        $this->uiHelper = $uiHelper;
     }
 
     public function getPubUrl($resource, $module = "Tmvc_Backend") {
@@ -148,5 +156,13 @@ class Backend extends DataObject
     public function getUrlBuilder()
     {
         return $this->url;
+    }
+
+    /**
+     * @return UiHelper
+     */
+    public function getUiHelper(): UiHelper
+    {
+        return $this->uiHelper;
     }
 }

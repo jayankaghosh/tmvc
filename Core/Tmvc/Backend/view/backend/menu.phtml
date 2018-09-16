@@ -9,9 +9,10 @@
     <?php endforeach; ?>
 </ul>
 
-<script src="<?php echo $block->getPubUrl("menu/js/menu.js") ?>"></script>
 <script type="text/javascript">
-    $('.section.menu').menu({
-        initialState: "<?php echo $block->getSectionUrl($block->getCurrentSection()) ?>"
+    require(['jquery', 'Tmvc_Backend/menu/js/menu'], function ($) {
+        $('.section.menu').menu({
+            initialState: "<?php echo $block->getSectionUrl($block->getCurrentSection()) ?>"
+        });
     });
 </script>

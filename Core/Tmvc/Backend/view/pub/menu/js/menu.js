@@ -1,4 +1,4 @@
-(function ($) {
+define(['jquery'], function($) {
     $.fn.extend({
         menu: function (options) {
             options = $.extend({
@@ -43,4 +43,4 @@
             hideChildren();
         }
     });
-})(window.jQuery);
+});

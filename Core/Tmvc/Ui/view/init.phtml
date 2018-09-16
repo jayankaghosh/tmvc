@@ -1,0 +1,41 @@
+<?php
+/** @var \Tmvc\Ui\Block\Init $block */
+?>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<link href="<?php echo $block->getUrlBuilder()->getPubUrl("Tmvc_Ui/lib/css/bootstrap/bootstrap.min.css") ?>" rel="stylesheet">
+
+<link href="<?php echo $block->getUrlBuilder()->getPubUrl("Tmvc_Ui/lib/css/font-awesome/all.min.css") ?>" rel="stylesheet" type="text/css">
+
+<link href="<?php echo $block->getUrlBuilder()->getPubUrl("Tmvc_Ui/lib/css/datatables/dataTables.bootstrap4.min.css") ?>" rel="stylesheet">
+
+<script>
+    var PUB_BASE_URL = "<?php echo $block->getUrlBuilder()->getPubUrl('') ?>";
+</script>
+<script data-main="<?php echo $block->getUrlBuilder()->getPubUrl('') ?>" src="<?php echo $block->getUrlBuilder()->getPubUrl('Tmvc_Ui/lib/js/requirejs.min.js') ?>"></script>
+<script>
+    requirejs.config({
+        "paths" : {
+            "jquery"        : "Tmvc_Ui/lib/js/jquery.min",
+            "bootstrap"     : "Tmvc_Ui/lib/js/bootstrap.bundle.min",
+            "chart"         : "Tmvc_Ui/lib/js/Chart",
+            "datatables"    : "Tmvc_Ui/lib/js/jquery/datatables/jquery.dataTables.min"
+        },
+        "shim" : {
+            "bootstrap" : ["jquery"],
+            "datatables": ["jquery", "Tmvc_Ui/lib/js/jquery/datatables/dataTables.bootstrap4.min"]
+        }
+    });
+</script>
+
+<script>
+    require([
+        'Tmvc_Ui/lib/js/jquery/jquery.loader',
+        'Tmvc_Ui/lib/js/jquery/jquery.easing.min',
+        'bootstrap'
+    ], function() {});
+</script>
