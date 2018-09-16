@@ -11,7 +11,9 @@ namespace Tmvc\Framework\Application;
 
 
 use Tmvc\Framework\App\Request;
+use Tmvc\Framework\Exception\UrlMismatchException;
 use Tmvc\Framework\Router\Manager as RouterManager;
+use Tmvc\Framework\Tools\Url;
 
 class Http implements ApplicationInterface
 {
@@ -31,20 +33,27 @@ class Http implements ApplicationInterface
      * @var RouterManager
      */
     private $routerManager;
+    /**
+     * @var Url
+     */
+    private $url;
 
     /**
      * Http constructor.
      * @param Request $request
      * @param RouterManager $routerManager
+     * @param Url $url
      */
     public function __construct(
         Request $request,
-        RouterManager $routerManager
+        RouterManager $routerManager,
+        Url $url
     )
     {
         $this->serverParameters = $_SERVER;
         $this->request = $request;
         $this->routerManager = $routerManager;
+        $this->url = $url;
     }
 
     /**
@@ -65,7 +74,12 @@ class Http implements ApplicationInterface
         /* Route the query */
 
         if (!$queryString) {
-            $queryString = $this->getQueryString();
+            try {
+                $queryString = $this->getQueryString();
+            } catch (UrlMismatchException $urlMismatchException) {
+                header("Location: ".$this->url->getBaseUrl(), true, 302);
+                exit(1);
+            }
         }
 
         $query = $this->getQueryParameters($queryString);
@@ -106,7 +120,7 @@ class Http implements ApplicationInterface
             }
 
             /* Remove GET Params from query string */
-            $queryString = str_replace("?".urldecode(http_build_query($_GET)), "", $queryString);
+            $queryString = str_replace("?".strtolower(urldecode(http_build_query($_GET))), "", $queryString);
 
             $queryParameters = array_filter(explode("/", $queryString));
             $params = $_GET;
@@ -131,22 +145,32 @@ class Http implements ApplicationInterface
         return $this->queryParameters;
     }
 
+    /**
+     * @return string
+     * @throws UrlMismatchException
+     */
     protected function getQueryString() {
         if (
             $this->serverParameters &&
             isset($this->serverParameters['REQUEST_URI']) &&
-            isset($this->serverParameters['PHP_SELF'])
+            isset($this->serverParameters['HTTP_HOST'])
         ) {
+            /* Fetch Host */
+            $host = $this->serverParameters['HTTP_HOST'];
+
             /* Fetch request URI */
             $requestUri = $this->serverParameters['REQUEST_URI'];
-            /* Get index file URI from PHP_SELF */
-            $indexFileUri = str_replace(self::INDEX_FILE, "", $this->serverParameters['PHP_SELF']);
 
-            /* Remove URI leading to index file from Request URI */
-            $requestUri = str_replace($indexFileUri, "", $requestUri);
+            /* Check if site uses HTTPS */
+            $isSecure = isset($this->serverParameters['HTTPS']) && $this->serverParameters['HTTPS'] === 'on';
 
-            /* Remove index file itself from Request URI */
-            $requestUri = str_replace(self::INDEX_FILE, "", $requestUri);
+            $fullUrl = ($isSecure ? "https" : "http") . "://$host$requestUri";
+
+            if (strpos($fullUrl, $this->url->getBaseUrl()) !== 0) {
+                throw new UrlMismatchException("Base URL must be ".$this->url->getBaseUrl());
+            }
+
+            $requestUri = str_replace($this->url->getBaseUrl(), "", $fullUrl);
 
         } else {
             $requestUri = "";

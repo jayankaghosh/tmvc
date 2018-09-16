@@ -11,9 +11,6 @@ namespace Tmvc\Eav\Model;
 
 use Tmvc\Eav\Model\Eav\AttributeLoader;
 use Tmvc\Eav\Model\Eav\AttributeSaver;
-use Tmvc\Framework\Cache;
-use Tmvc\Framework\Event\Manager as EventManager;
-use Tmvc\Framework\Model\Resource\Table;
 
 abstract class AbstractModel extends \Tmvc\Framework\Model\AbstractModel
 {
@@ -30,22 +27,16 @@ abstract class AbstractModel extends \Tmvc\Framework\Model\AbstractModel
 
     /**
      * AbstractModel constructor.
-     * @param EventManager $eventManager
-     * @param Cache $cache
-     * @param AttributeLoader $attributeLoader
-     * @param AttributeSaver $attributeSaver
+     * @param Context $context
      * @throws \Tmvc\Framework\Exception\TmvcException
      */
     public function __construct(
-        EventManager $eventManager,
-        Cache $cache,
-        AttributeLoader $attributeLoader,
-        AttributeSaver $attributeSaver
+        Context $context
     )
     {
-        parent::__construct($eventManager, $cache);
-        $this->attributeLoader = $attributeLoader;
-        $this->attributeSaver = $attributeSaver;
+        parent::__construct($context);
+        $this->attributeLoader = $context->getAttributeLoader();
+        $this->attributeSaver = $context->getAttributeSaver();
     }
 
     /**

@@ -133,7 +133,11 @@ class Router implements RouterInterface {
             $this->eventManager->dispatch("controller_action_predispatch", $eventParameters);
             $this->eventManager->dispatch($request->getFullRoute()."_predispatch", $eventParameters);
 
-            $result = $obj->execute($request);
+            if (!$obj->isDispatched()) {
+                $obj->setDispatcher($obj->execute($request))->setDispatched(true);
+            }
+
+            $result = $obj->getDispatcher();
 
             $this->eventManager->dispatch("controller_action_postdispatch", $eventParameters);
             $this->eventManager->dispatch($request->getFullRoute()."_postdispatch", $eventParameters);

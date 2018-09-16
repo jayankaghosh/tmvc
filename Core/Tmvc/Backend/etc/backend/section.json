@@ -1,0 +1,13 @@
+{
+  "sections": [
+    {
+      "id": "dashboard",
+      "label": "Dashboard",
+      "block": "Tmvc\\Backend\\Block\\Backend\\Sections\\Dashboard",
+      "template": "Tmvc_Backend::backend/sections/dashboard.phtml",
+      "sort_order": 1000,
+      "icon_class": "fa-tachometer-alt",
+      "parent": null
+    }
+  ]
+}

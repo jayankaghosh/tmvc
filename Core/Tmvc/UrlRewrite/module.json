@@ -1,5 +1,6 @@
 {
   "name": "Tmvc_UrlRewrite",
   "version": "0.0.1",
-  "sort_order": 1000
+  "sort_order": 1000,
+  "active": true
 }

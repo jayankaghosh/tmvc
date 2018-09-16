@@ -13,6 +13,7 @@ namespace Tmvc\Framework\Cli;
 use Tmvc\Framework\Cache;
 use Tmvc\Framework\Module\Manager as ModuleManager;
 use Tmvc\Framework\Tools\File;
+use Tmvc\Framework\Tools\StringUtils;
 
 class CommandPool
 {
@@ -35,22 +36,29 @@ class CommandPool
      * @var Cache
      */
     private $cache;
+    /**
+     * @var StringUtils
+     */
+    private $stringUtils;
 
     /**
      * CommandPool constructor.
      * @param ModuleManager $moduleManager
      * @param File $file
      * @param Cache $cache
+     * @param StringUtils $stringUtils
      */
     public function __construct(
         ModuleManager $moduleManager,
         File $file,
-        Cache $cache
+        Cache $cache,
+        StringUtils $stringUtils
     )
     {
         $this->moduleManager = $moduleManager;
         $this->file = $file;
         $this->cache = $cache;
+        $this->stringUtils = $stringUtils;
         $this->prepareCommands();
     }
 
@@ -79,7 +87,12 @@ class CommandPool
                             )
                         );
                         $namespace = implode("\\", $namespace);
-                        $command = $module->getCliCode().":".strtolower(str_replace("/", ":", $file['matches'][1]));
+                        $command = $module->getCliCode().":". str_replace("/", ":", $file['matches'][1]);
+                        $command = explode(":", $command);
+                        foreach ($command as $key => $section) {
+                            $command[$key] = str_replace("_", "-", $this->stringUtils->camelToSnakeCase($section));
+                        }
+                        $command = strtolower(implode(":", $command));
                         $this->_commands[$command] = $namespace;
                     }
                 }

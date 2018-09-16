@@ -27,19 +27,19 @@ class ReflectionClass
             $constructor = $class->getConstructor();
             if ($constructor && count($constructor->getParameters())) {
                 foreach ($constructor->getParameters() as $key => $constructorParameter) {
-                    try {
-                        $constructorParameterClass = $constructorParameter->getClass();
-                    } catch (\Exception $exception) {
-                        self::generateFactoryIfPossible($constructorParameter->getType());
-                        $constructorParameterClass = $constructorParameter->getClass();
-                    }
-                    if ($constructorParameterClass) {
-                        $constructorParameterName = $constructorParameterClass->getName();
-                        $object = ObjectManager::get($constructorParameterName);
-                        $constructorArguments[$key] = $object;
+                    if (array_key_exists($constructorParameter->getName(), $arguments)) {
+                        $constructorArguments[$key] = $arguments[$constructorParameter->getName()];
                     } else {
-                        if (isset($arguments[$constructorParameter->getName()])) {
-                            $constructorArguments[$key] = $arguments[$constructorParameter->getName()];
+                        try {
+                            $constructorParameterClass = $constructorParameter->getClass();
+                        } catch (\Exception $exception) {
+                            self::generateFactoryIfPossible($constructorParameter->getType());
+                            $constructorParameterClass = $constructorParameter->getClass();
+                        }
+                        if ($constructorParameterClass) {
+                            $constructorParameterName = $constructorParameterClass->getName();
+                            $object = ObjectManager::get($constructorParameterName);
+                            $constructorArguments[$key] = $object;
                         }
                     }
                 }

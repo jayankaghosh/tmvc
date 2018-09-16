@@ -2,5 +2,6 @@
   "name": "Tmvc_Framework",
   "version": "0.0.1",
   "sort_order": 10,
-  "cli_code": "tmvc"
+  "cli_code": "tmvc",
+  "active": true
 }

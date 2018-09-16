@@ -138,7 +138,7 @@ class Request
         return $this->postParams;
     }
 
-    public function getPostParam($name, $default) {
+    public function getPostParam($name, $default = null) {
         return isset($this->getPostParams()[$name]) ? $this->getPostParams()[$name] : $default;
     }
 
