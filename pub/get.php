@@ -63,7 +63,7 @@ $mime_types = array(
 );
 
 
-if ($resource) {
+if ($resource && file_exists($resource)) {
     $extension = pathinfo($resource, PATHINFO_EXTENSION);
     $mimeType = array_key_exists($extension, $mime_types) ? $mime_types[$extension] : $mime_types['txt'];
     header("Content-type: $mimeType; charset: UTF-8");

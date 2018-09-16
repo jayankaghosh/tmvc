@@ -1,0 +1,36 @@
+{
+  "sections": [
+    {
+      "id": "cms",
+      "label": "CMS",
+      "block": "",
+      "template": "",
+      "sort_order": 2000,
+      "parent": null
+    },
+    {
+      "id": "cms-page",
+      "label": "Pages",
+      "block": "",
+      "template": "",
+      "sort_order": 10,
+      "parent": "cms"
+    },
+    {
+      "id": "cms-page-listing",
+      "label": "View All Pages",
+      "block": "Tmvc\\Cms\\Block\\Backend\\Sections\\Page\\Listing",
+      "template": "Tmvc_Cms::backend/sections/page/listing.phtml",
+      "sort_order": 20,
+      "parent": "cms-page"
+    },
+    {
+      "id": "cms-page-add",
+      "label": "Add New Page",
+      "block": "Tmvc\\Cms\\Block\\Backend\\Sections\\Page\\Add",
+      "template": "Tmvc_Cms::backend/sections/page/form.phtml",
+      "sort_order": 10,
+      "parent": "cms-page"
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 .section.menu ul {
+    word-break: break-word;
     list-style: none;
 }
 .section.menu ul.child {

@@ -31,6 +31,9 @@
     <script src="<?php echo $block->getPubUrl("sb_admin/jquery/jquery.min.js") ?>"></script>
     <script src="<?php echo $block->getPubUrl("sb_admin/bootstrap/js/bootstrap.bundle.min.js") ?>"></script>
 
+    <!-- Loader -->
+    <script src="<?php echo $block->getPubUrl("sb_admin/jquery/jquery.loader.js") ?>"></script>
+
     <!-- Core plugin JavaScript-->
     <script src="<?php echo $block->getPubUrl("sb_admin/jquery-easing/jquery.easing.min.js") ?>"></script>
 
@@ -103,7 +106,7 @@
         <div class="container-fluid">
             <!-- Breadcrumbs-->
             <?php echo $this->loadSection("breadcrumbs", "Tmvc_Backend::backend/breadcrumbs.phtml", $block) ?>
-            <div class="content">
+            <div class="content" id="content">
                 <?php echo $block->loadSectionContent() ?>
             </div>
         </div>

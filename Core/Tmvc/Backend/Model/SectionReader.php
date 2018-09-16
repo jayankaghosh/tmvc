@@ -83,6 +83,8 @@ class SectionReader
             $sectionData[$section['id']] = $section;
         }
 
+        $this->_sortSections($sectionData);
+
         foreach ($sectionData as $key => $section) {
             if (!isset($sectionData[$key]['_children'])) {
                 $sectionData[$key]['_children'] = [];
@@ -106,7 +108,6 @@ class SectionReader
             }
         }
 
-        $this->_sortSections($sectionData);
         return $sectionData;
     }
 

@@ -68,7 +68,7 @@ class Index extends AbstractAction
         $currentSection = $this->getCurrentSection($request);
         if (!$currentSection) {
             return $this->response->setRedirect($this->getUrlBuilder()->getUrl('*', ['section' => 'dashboard']));
-        } else if ($request->getParam('isAjax')) {
+        } else if ($request->getParam('isAjax') === "true") {
             $data = [
                 'status'    =>  true,
                 'message'   =>  $this->backend->loadSectionContent()

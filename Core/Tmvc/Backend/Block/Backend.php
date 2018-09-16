@@ -93,7 +93,7 @@ class Backend extends DataObject
             $sectionIdentifier[] = $parent->getId();
         }
         $sectionIdentifier = urlencode(implode("/", $sectionIdentifier));
-        return $section->hasChildren() ? "#" : $this->url->getUrl('*', ['section' => $section->getId()])."?p=$sectionIdentifier";
+        return $section->hasChildren() ? "#" : $this->url->getUrl('*', ['section' => $section->getId()])."?p=$sectionIdentifier&isAjax=false";
     }
 
     /**

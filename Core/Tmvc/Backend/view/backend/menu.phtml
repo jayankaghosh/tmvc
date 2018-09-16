@@ -11,5 +11,7 @@
 
 <script src="<?php echo $block->getPubUrl("menu/js/menu.js") ?>"></script>
 <script type="text/javascript">
-    $('.section.menu').menu({});
+    $('.section.menu').menu({
+        initialState: "<?php echo $block->getSectionUrl($block->getCurrentSection()) ?>"
+    });
 </script>

@@ -69,4 +69,12 @@ class AbstractSection extends DataObject
     {
         return $this->currentSection;
     }
+
+    /**
+     * @param string $sectionId
+     * @return string
+     */
+    public function getSectionUrl($sectionId) {
+        return $this->urlBuilder->getUrl('backend', ['section' => $sectionId]);
+    }
 }
