@@ -11,8 +11,6 @@ namespace Tmvc\Cms\Block\Backend\Sections\Page;
 
 
 use Tmvc\Backend\Block\Backend\Sections\AbstractSection;
-use Tmvc\Backend\Block\Backend\Sections\Context;
-use Tmvc\Backend\Block\Section\Section;
 
 class Add extends AbstractSection
 {
