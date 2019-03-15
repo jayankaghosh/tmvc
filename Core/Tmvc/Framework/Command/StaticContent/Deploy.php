@@ -70,18 +70,25 @@ class Deploy extends AbstractCommand
         $response->setForegroundColor(Response\Colors::FOREGROUND_COLOR_GREEN)->writeln("Starting Deployment of static content");
         $response->setForegroundColor(Response\Colors::NO_COLOUR);
 
+
+
         foreach ($this->moduleManager->getModuleList() as $module) {
             if (is_dir($module->getPath()."/view/pub")) {
                 $this->deploy->execute($module->getPath() . "/view/pub", PROJECT_ROOT_PATH . "pub/" . $module->getName());
                 $response->write(".");
             }
         }
-        $this->generateDeploymentVersion();
+        $this->generateMetaData();
         $response->writeln("");
         $response->setForegroundColor(Response\Colors::FOREGROUND_COLOR_GREEN)->writeln("Deployment Complete");
     }
 
-    protected function generateDeploymentVersion() {
+    protected function generateMetaData() {
+        $this->file->load(PROJECT_ROOT_PATH."pub/.htaccess")->write('RewriteRule ^(.*)$ index.php?u=$1 [NC,QSA]');
+        $this->file->load(PROJECT_ROOT_PATH."pub/index.php")->write('<?php
+$filename = __DIR__.str_replace(file_get_contents(\'deployment_version\'), \'\', $_REQUEST[\'u\']);
+header(\'Content-type: text/\'.pathinfo($filename, PATHINFO_EXTENSION));
+require_once $filename;');
         $version = $this->hasher->hash(strtotime('now'));
         $this->file->load(PROJECT_ROOT_PATH."pub/deployment_version")->write($version);
     }

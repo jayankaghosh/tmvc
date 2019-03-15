@@ -48,7 +48,7 @@ class Config
      * @throws \Tmvc\Framework\Exception\TmvcException
      */
     public function addRoute($route, $method, $callback, $override = false) {
-        \Router::addRoute($route, $method, $callback, $override);
+        \Tmvc\Framework\Router\Router::addRoute($route, $method, $callback, $override);
     }
 
     /**

@@ -2,7 +2,5 @@ app/
 var/
 app_env.json
 .idea
-pub/*
-!/pub/get.php
-!/pub/.htaccess
+pub/
 vendor/

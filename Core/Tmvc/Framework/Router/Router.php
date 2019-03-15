@@ -1,5 +1,7 @@
 <?php
 
+namespace Tmvc\Framework\Router;
+
 use Tmvc\Framework\Controller\AbstractController;
 
 use Tmvc\Framework\Event\Manager as EventManager;

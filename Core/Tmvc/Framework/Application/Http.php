@@ -104,7 +104,7 @@ class Http implements ApplicationInterface
         /* Call default router if none of the routers in the pool can handle the request */
         if (!$routed) {
             /* @var \Tmvc\Framework\Router\RouterInterface $router */
-            $router = \Tmvc\Framework\Tools\ObjectManager::get(\Router::class);
+            $router = \Tmvc\Framework\Tools\ObjectManager::get(\Tmvc\Framework\Router\Router::class);
             $router->route($request, $queryString, $this);
         }
     }
