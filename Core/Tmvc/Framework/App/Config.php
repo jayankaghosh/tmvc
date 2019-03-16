@@ -74,4 +74,14 @@ class Config
         $router = ObjectManager::get($routerName);
         $this->routerManager->addRouter($router);
     }
+
+    /**
+     * @param $className
+     * @return mixed|null
+     */
+    public function getInstance($className)
+    {
+        return ObjectManager::get($className);
+    }
+
 }

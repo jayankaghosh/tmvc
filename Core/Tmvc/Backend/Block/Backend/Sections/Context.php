@@ -11,6 +11,7 @@ namespace Tmvc\Backend\Block\Backend\Sections;
 
 use Tmvc\Framework\Tools\Url as UrlBuilder;
 use Tmvc\Ui\Block\Widget\ListingFactory as ListingWidgetFactory;
+use Tmvc\Ui\Block\Widget\FormFactory as FormWidgetFactory;
 
 class Context
 {
@@ -22,19 +23,26 @@ class Context
      * @var ListingWidgetFactory
      */
     private $listingWidgetFactory;
+    /**
+     * @var FormWidgetFactory
+     */
+    private $formWidgetFactory;
 
     /**
      * Context constructor.
      * @param UrlBuilder $urlBuilder
      * @param ListingWidgetFactory $listingWidgetFactory
+     * @param FormWidgetFactory $formWidgetFactory
      */
     public function __construct(
         UrlBuilder $urlBuilder,
-        ListingWidgetFactory $listingWidgetFactory
+        ListingWidgetFactory $listingWidgetFactory,
+        FormWidgetFactory $formWidgetFactory
     )
     {
         $this->urlBuilder = $urlBuilder;
         $this->listingWidgetFactory = $listingWidgetFactory;
+        $this->formWidgetFactory = $formWidgetFactory;
     }
 
     /**
@@ -51,5 +59,13 @@ class Context
     public function getListingWidgetFactory(): ListingWidgetFactory
     {
         return $this->listingWidgetFactory;
+    }
+
+    /**
+     * @return FormWidgetFactory
+     */
+    public function getFormWidgetFactory(): FormWidgetFactory
+    {
+        return $this->formWidgetFactory;
     }
 }

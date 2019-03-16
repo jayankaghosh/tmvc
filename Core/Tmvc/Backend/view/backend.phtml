@@ -71,7 +71,9 @@
 
         <div class="container-fluid">
             <!-- Breadcrumbs-->
-            <?php echo $this->loadSection("breadcrumbs", "Tmvc_Backend::backend/breadcrumbs.phtml", $block) ?>
+            <div id="breadcrumb-container">
+                <?php echo $this->loadSection("breadcrumbs", "Tmvc_Backend::backend/breadcrumbs.phtml", $block) ?>
+            </div>
             <div class="content" id="content">
                 <?php echo $block->loadSectionContent() ?>
             </div>

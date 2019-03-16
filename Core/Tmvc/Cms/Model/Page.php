@@ -68,7 +68,7 @@ class Page extends AbstractModel
     }
 
     /**
-     * @param int $pageContent
+     * @param int $responseCode
      * @return $this
      */
     public function setResponseCode($responseCode) {

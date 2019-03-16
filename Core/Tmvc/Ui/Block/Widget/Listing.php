@@ -95,4 +95,14 @@ class Listing extends DataObject
         return array_key_exists($option, $this->getOptions()) ? $this->getOptions()[$option] : null;
     }
 
+    /**
+     * @return string
+     * @throws \Tmvc\Framework\Exception\ArgumentMismatchException
+     * @throws \Tmvc\Framework\Exception\TmvcException
+     */
+    public function __toString()
+    {
+        return $this->render()->__toString();
+    }
+
 }

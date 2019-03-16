@@ -32,13 +32,17 @@ class DataObject implements \JsonSerializable
     }
 
     /**
-     * @param string $key
+     * @param string|array $key
      * @param mixed $value
      * @param bool $elegant
      * @return $this
      * @throws TmvcException
      */
-    public function addData($key, $value, $elegant = true) {
+    public function addData($key, $value = null, $elegant = true) {
+        if (is_array($key)) {
+            $this->data = array_merge($this->data, $key);
+            return $this;
+        }
         if (!$elegant && isset($this->data[$key])) {
             throw new TmvcException("$key already exists in object");
         }

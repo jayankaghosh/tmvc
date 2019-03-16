@@ -13,6 +13,7 @@ use Tmvc\Backend\Block\Section\Section;
 use Tmvc\Backend\Block\Section\SectionPool;
 use Tmvc\Framework\App\Request;
 use Tmvc\Framework\DataObject;
+use Tmvc\Framework\Exception\TmvcException;
 use Tmvc\Framework\Tools\AppEnv;
 use Tmvc\Framework\Tools\ObjectManager;
 use Tmvc\Framework\Tools\Url;
@@ -143,7 +144,11 @@ class Backend extends DataObject
     public function loadSectionContent() {
         $currentSection = $this->getCurrentSection();
         $block = ObjectManager::create($currentSection->getBlock(), ['currentSection' => $currentSection]);
-        return $this->view->loadSection($currentSection->getId(), $currentSection->getTemplate(), $block);
+        try {
+            return $this->view->loadSection($currentSection->getId(), $currentSection->getTemplate(), $block);
+        } catch (TmvcException $tmvcException) {
+            return sprintf("<h1>%s</h1>", $tmvcException->getMessage());
+        }
     }
 
     public function getAppName() {

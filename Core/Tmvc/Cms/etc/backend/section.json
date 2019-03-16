@@ -25,9 +25,9 @@
       "parent": "cms-page"
     },
     {
-      "id": "cms-page-add",
-      "label": "Add New Page",
-      "block": "Tmvc\\Cms\\Block\\Backend\\Sections\\Page\\Add",
+      "id": "cms-page-addedit",
+      "label": "Add/Edit Page",
+      "block": "Tmvc\\Cms\\Block\\Backend\\Sections\\Page\\Form",
       "template": "Tmvc_Cms::backend/sections/page/form.phtml",
       "sort_order": 10,
       "parent": "cms-page"

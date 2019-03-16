@@ -71,7 +71,8 @@ class Index extends AbstractAction
         } else if ($request->getParam('isAjax') === "true") {
             $data = [
                 'status'    =>  true,
-                'message'   =>  $this->backend->loadSectionContent()
+                'message'   =>  $this->backend->loadSectionContent(),
+                'breadcrumb'=>  $this->getView()->loadSection("breadcrumbs", "Tmvc_Backend::backend/breadcrumbs.phtml", $this->backend)
             ];
             return $this->response->setBody(\json_encode($data))->addHeader('Content-Type', "application/json");
         }

@@ -1,0 +1,64 @@
+<?php
+/** @var \Tmvc\Ui\Block\Widget\Form $block */
+?>
+<hr />
+<div class="heading">
+    <h3><?php echo $block->getTitle() ?></h3>
+    <button id="<?php echo $block->getWidgetId() ?>-submit-button" type="submit" class="btn btn-success"><?php echo "Save" ?></button>
+    <a href="javascript:window.history.back()" class="btn btn-primary"><?php echo "Back" ?></a>
+</div>
+<hr />
+<form class="form" id="<?php echo $block->getWidgetId() ?>" method="post" action="<?php echo $block->getFormAction() ?>">
+    <fieldset class="fieldset">
+        <?php foreach ($block->getFields() as $id => $field): ?>
+            <div class="form-group row">
+                <?php if ($field->getData('type') !== \Tmvc\Ui\Block\Widget\Form::FIELD_TYPE_HIDDEN): ?>
+                    <label class="col-sm-2 col-form-label" for="<?php echo $id ?>"><?php echo $field->getData('label') ?></label>
+                <?php endif; ?>
+                <div class="col-sm-10">
+                    <?php switch ($field->getData('type')):
+                        case \Tmvc\Ui\Block\Widget\Form::FIELD_TYPE_HIDDEN: ?>
+                            <input type="hidden" class="form-control" id="<?php echo $id ?>" name="<?php echo $id ?>" value="<?php echo $field->getData('value') ?>" />
+                            <?php break; ?>
+                        <?php case \Tmvc\Ui\Block\Widget\Form::FIELD_TYPE_PASSWORD: ?>
+                            <input type="password" class="form-control" id="<?php echo $id ?>" name="<?php echo $id ?>" value="<?php echo $field->getData('value') ?>" />
+                            <?php break; ?>
+                        <?php case \Tmvc\Ui\Block\Widget\Form::FIELD_TYPE_SELECT: ?>
+                        <?php case \Tmvc\Ui\Block\Widget\Form::FIELD_TYPE_MULTISELECT: ?>
+                            <select class="form-control" id="<?php echo $id ?>" name="<?php echo $id ?>" <?php if($field->getData('type') === \Tmvc\Ui\Block\Widget\Form::FIELD_TYPE_MULTISELECT) echo 'multiple' ?>>
+                                <?php
+                                    $options = $field->getData('additional')->getData('options');
+                                    if (!$options) {
+                                        $options = [];
+                                    }
+                                ?>
+                                <?php foreach ($options as $option): ?>
+                                    <option value="<?php echo $option['value'] ?>" <?php if ($field->getData('value') == $option['value']) echo 'selected' ?> ><?php echo $option['label'] ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                            <?php break; ?>
+                        <?php case \Tmvc\Ui\Block\Widget\Form::FIELD_TYPE_TEXTAREA: ?>
+                            <textarea rows="10" class="form-control" id="<?php echo $id ?>" name="<?php echo $id ?>"><?php echo $field->getData('value') ?></textarea>
+                            <?php break; ?>
+                        <?php case \Tmvc\Ui\Block\Widget\Form::FIELD_TYPE_CHECKBOX: ?>
+                            <label class="switch">
+                                <input type="checkbox" class="form-control" id="<?php echo $id ?>" name="<?php echo $id ?>" <?php if ($field->getData('value')) echo 'checked' ?> />
+                                <span class="slider round"></span>
+                            </label>
+                            <?php break; ?>
+                        <?php default: ?>
+                            <input type="text" class="form-control" id="<?php echo $id ?>" name="<?php echo $id ?>" value="<?php echo $field->getData('value') ?>" />
+                    <?php endswitch; ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </fieldset>
+</form>
+<script type="text/javascript">
+    require(['jquery'], function ($) {
+        $('#' + "<?php echo $block->getWidgetId() ?>-submit-button").on('click', function (e) {
+            e.preventDefault();
+            $('#' + "<?php echo $block->getWidgetId() ?>").submit();
+        });
+    })
+</script>

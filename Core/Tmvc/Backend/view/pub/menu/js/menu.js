@@ -13,6 +13,7 @@ define(['jquery'], function($) {
                 $.get(sectionUrl.replace('isAjax=false', 'isAjax=true'), function (data) {
                     if (data.status) {
                         $('#content').html(data.message);
+                        $('#breadcrumb-container').html(data.breadcrumb);
                         if (pushState && window.location.href !== sectionUrl) {
                             window.history.pushState({urlPath: sectionUrl}, "", sectionUrl);
                         }
