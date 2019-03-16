@@ -15,11 +15,16 @@ class Request
     protected $options = [];
 
     /**
+     * @param array $excluding
      * @return array
      */
-    public function getOptions(): array
+    public function getOptions($excluding = []): array
     {
-        return $this->options;
+        return array_diff_key($this->options, array_flip($excluding));
+    }
+
+    public function getOption($key, $default = null) {
+        return array_key_exists($key, $this->getOptions()) ? $this->getOptions()[$key] : $default;
     }
 
     /**

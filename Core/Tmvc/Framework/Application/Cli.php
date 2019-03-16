@@ -79,11 +79,11 @@ class Cli implements ApplicationInterface
                             $argument = explode("=", trim($argument, "-"));
                             if ($argument[0] === $option->getName()) {
                                 $options[$option->getName()] = ((isset($argument[1])) ? $argument[1] : true);
-                                break 2;
+                                continue 2;
                             }
                         }
                         if ($option->isRequired()) {
-                            throw new ArgumentMismatchException($option->getName()." is a required option");
+                            throw new ArgumentMismatchException('"' . $option->getName() . '"' . " is a required option");
                         }
                     }
                     $this->request->setOptions($options);

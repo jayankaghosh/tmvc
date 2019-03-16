@@ -9,10 +9,11 @@
 
 namespace Tmvc\Ui\Block\Widget;
 
+use Tmvc\Framework\DataObject;
 use Tmvc\Framework\Model\AbstractCollection;
 use Tmvc\Framework\View\ViewFactory;
 
-class Listing
+class Listing extends DataObject
 {
     /**
      * @var ViewFactory
@@ -22,23 +23,51 @@ class Listing
      * @var AbstractCollection
      */
     private $collection;
+    /**
+     * @var array
+     */
+    private $options;
 
     /**
      * Listing constructor.
      * @param ViewFactory $viewFactory
      * @param AbstractCollection $collection
+     * @param array $options
      */
     public function __construct(
         ViewFactory $viewFactory,
-        $collection
+        $collection,
+        $options = []
     )
     {
         $this->viewFactory = $viewFactory;
         $this->collection = $collection;
+        $this->options = $options;
     }
 
+    /**
+     * @return \Tmvc\Framework\View\View
+     * @throws \Tmvc\Framework\Exception\ArgumentMismatchException
+     * @throws \Tmvc\Framework\Exception\TmvcException
+     */
     public function render() {
         return $this->viewFactory->create()->loadView(get_class($this->collection), "Tmvc_Ui::widget/listing.phtml", $this);
+    }
+
+    public function renderCell($name, $data)
+    {
+        return $data;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWidgetId()
+    {
+        if (!$this->getData('widget_id')) {
+            $this->setData('widget_id', strtolower(str_replace("\\", "_", get_class($this->collection)) . '_' . uniqid()));
+        }
+        return $this->getData('widget_id');
     }
 
     /**
@@ -47,6 +76,23 @@ class Listing
     public function getCollection()
     {
         return $this->collection;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param $option
+     * @return mixed|null
+     */
+    public function getOption($option)
+    {
+        return array_key_exists($option, $this->getOptions()) ? $this->getOptions()[$option] : null;
     }
 
 }

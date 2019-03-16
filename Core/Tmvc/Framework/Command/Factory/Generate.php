@@ -75,8 +75,13 @@ class Generate extends AbstractCommand
                         continue 2;
                     }
                 }
-                @ReflectionClass::parseClass($class);
-                $response->write(".");
+                try {
+                    @ReflectionClass::parseClass($class);
+                } catch (\ArgumentCountError $argumentCountError) {
+                    // ignore class
+                } finally {
+                    $response->write(".");
+                }
             }
         }
         $response->writeln();

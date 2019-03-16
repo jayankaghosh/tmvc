@@ -10,6 +10,7 @@
 namespace Tmvc\Backend\Model;
 
 use Tmvc\Backend\Model\Admin\CollectionFactory as AdminCollectionFactory;
+use Tmvc\Backend\Model\AdminFactory;
 use Tmvc\Framework\Exception\AuthenticationException;
 use Tmvc\Framework\Tools\Crypto\Hasher;
 
@@ -23,19 +24,26 @@ class AdminManagement
      * @var Hasher
      */
     private $hasher;
+    /**
+     * @var \Tmvc\Backend\Model\AdminFactory
+     */
+    private $adminFactory;
 
     /**
      * AdminManagement constructor.
      * @param AdminCollectionFactory $adminCollectionFactory
      * @param Hasher $hasher
+     * @param \Tmvc\Backend\Model\AdminFactory $adminFactory
      */
     public function __construct(
         AdminCollectionFactory $adminCollectionFactory,
-        Hasher $hasher
+        Hasher $hasher,
+        AdminFactory $adminFactory
     )
     {
         $this->adminCollectionFactory = $adminCollectionFactory;
         $this->hasher = $hasher;
+        $this->adminFactory = $adminFactory;
     }
 
     /**
@@ -53,6 +61,25 @@ class AdminManagement
         if (!$admin->getId()) {
             throw new AuthenticationException("Incorrect username or password");
         }
+        return $admin;
+    }
+
+    /**
+     * @param string $username
+     * @param string|null $password
+     * @param array $additional
+     * @return Admin
+     * @throws \Tmvc\Framework\Exception\TmvcException
+     */
+    public function create($username, $password = null, $additional = []) {
+        if (!$password) {
+            $password = $this->hasher->hash(uniqid());
+        }
+        $admin = $this->adminFactory->create();
+        $admin->setData($additional)
+            ->setData('username', $username)
+            ->setData('password', $this->getPasswordHash($password))
+            ->save();
         return $admin;
     }
 

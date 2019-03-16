@@ -1,3 +1,29 @@
 <?php
 /** @var \Tmvc\Ui\Block\Widget\Listing $block */
+$data = $block->getCollection()->toArray();
 ?>
+<table class="table" id="<?php echo $block->getWidgetId() ?>">
+    <thead class="thead-light">
+        <tr>
+            <?php foreach (array_keys(reset($data)) as $header): ?>
+                <th><?php echo $header ?></th>
+            <?php endforeach; ?>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($data as $row): ?>
+            <tr>
+                <?php foreach ($row as $cellName => $cellData): ?>
+                    <td><?php echo $block->renderCell($cellName, $cellData) ?></td>
+                <?php endforeach; ?>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
+</table>
+<script type="text/javascript">
+    require(['jquery', 'datatables'], function ($) {
+        $('#' + '<?php echo $block->getWidgetId() ?>').DataTable();
+    })
+</script>
+
+

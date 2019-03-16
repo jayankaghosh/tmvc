@@ -23,16 +23,6 @@ abstract class AbstractController
     private $context;
 
     /**
-     * @var View
-     */
-    private $view;
-
-    /**
-     * @var Url
-     */
-    private $urlBuilder;
-
-    /**
      * @var View/Response
      */
     private $dispatcher = null;
@@ -51,8 +41,6 @@ abstract class AbstractController
     )
     {
         $this->context = $context;
-        $this->view = $this->context->getView();
-        $this->urlBuilder = $this->context->getUrl();
     }
 
     /**
@@ -60,7 +48,7 @@ abstract class AbstractController
      */
     public function getView(): View
     {
-        return $this->view;
+        return $this->context->getView();
     }
 
     /**
@@ -83,7 +71,7 @@ abstract class AbstractController
      */
     public function getUrlBuilder(): Url
     {
-        return $this->urlBuilder;
+        return $this->context->getUrl();
     }
 
     /**

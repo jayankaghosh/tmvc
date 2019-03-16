@@ -10,6 +10,7 @@
 namespace Tmvc\Backend\Block\Backend\Sections;
 
 use Tmvc\Framework\Tools\Url as UrlBuilder;
+use Tmvc\Ui\Block\Widget\ListingFactory as ListingWidgetFactory;
 
 class Context
 {
@@ -17,16 +18,23 @@ class Context
      * @var UrlBuilder
      */
     private $urlBuilder;
+    /**
+     * @var ListingWidgetFactory
+     */
+    private $listingWidgetFactory;
 
     /**
      * Context constructor.
      * @param UrlBuilder $urlBuilder
+     * @param ListingWidgetFactory $listingWidgetFactory
      */
     public function __construct(
-        UrlBuilder $urlBuilder
+        UrlBuilder $urlBuilder,
+        ListingWidgetFactory $listingWidgetFactory
     )
     {
         $this->urlBuilder = $urlBuilder;
+        $this->listingWidgetFactory = $listingWidgetFactory;
     }
 
     /**
@@ -35,5 +43,13 @@ class Context
     public function getUrlBuilder(): UrlBuilder
     {
         return $this->urlBuilder;
+    }
+
+    /**
+     * @return ListingWidgetFactory
+     */
+    public function getListingWidgetFactory(): ListingWidgetFactory
+    {
+        return $this->listingWidgetFactory;
     }
 }

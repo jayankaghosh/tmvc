@@ -19,6 +19,7 @@ use Tmvc\Framework\Controller\Context;
 use Tmvc\Framework\Exception\AuthenticationException;
 use Tmvc\Framework\Exception\TmvcException;
 use Tmvc\Framework\View\View;
+use Tmvc\Ui\Model\Message\Manager as MessageManager;
 
 class Post extends AbstractController
 {
@@ -34,6 +35,10 @@ class Post extends AbstractController
      * @var Session
      */
     private $session;
+    /**
+     * @var MessageManager
+     */
+    private $messageManager;
 
     /**
      * Post constructor.
@@ -41,18 +46,21 @@ class Post extends AbstractController
      * @param Response $response
      * @param AdminManagement $adminManagement
      * @param Session $session
+     * @param MessageManager $messageManager
      */
     public function __construct(
         Context $context,
         Response $response,
         AdminManagement $adminManagement,
-        Session $session
+        Session $session,
+        MessageManager $messageManager
     )
     {
         parent::__construct($context);
         $this->response = $response;
         $this->adminManagement = $adminManagement;
         $this->session = $session;
+        $this->messageManager = $messageManager;
     }
 
     /**
@@ -72,6 +80,7 @@ class Post extends AbstractController
             }
             $this->response->setRedirect($this->getUrlBuilder()->getUrl('*'));
         } catch (AuthenticationException $authenticationException) {
+            $this->messageManager->addMessage($authenticationException->getMessage(), MessageManager::TYPE_ERROR);
             $this->response->setRedirect($this->getUrlBuilder()->getUrl('*/*'));
         }
         return $this->response;

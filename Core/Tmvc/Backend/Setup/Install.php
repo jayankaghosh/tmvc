@@ -79,6 +79,6 @@ class Install implements SetupInstallInterface
         $installer->createTable($table);
 
         $entity = $this->eavSetup->createEntity("admin", "Admin User");
-        $this->eavSetup->createAttribute($entity->getId(), "name", Table::TYPE_TEXT);
+        $this->eavSetup->createAttribute($entity->getId(), "name", Table::TYPE_TEXT, "Name");
     }
 }

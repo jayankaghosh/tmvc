@@ -22,11 +22,6 @@ class AbstractSection extends DataObject
     private $context;
 
     /**
-     * @var Url
-     */
-    private $urlBuilder;
-
-    /**
      * @var Section
      */
     private $currentSection;
@@ -34,7 +29,7 @@ class AbstractSection extends DataObject
     /**
      * AbstractSection constructor.
      * @param Context $context
-     * @param Section $currentSection
+     * @param $currentSection
      */
     public function __construct(
         Context $context,
@@ -42,7 +37,6 @@ class AbstractSection extends DataObject
     )
     {
         $this->context = $context;
-        $this->urlBuilder = $context->getUrlBuilder();
         $this->currentSection = $currentSection;
     }
 
@@ -59,7 +53,7 @@ class AbstractSection extends DataObject
      */
     public function getUrlBuilder(): Url
     {
-        return $this->urlBuilder;
+        return $this->context->getUrlBuilder();
     }
 
     /**
@@ -75,6 +69,21 @@ class AbstractSection extends DataObject
      * @return string
      */
     public function getSectionUrl($sectionId) {
-        return $this->urlBuilder->getUrl('backend', ['section' => $sectionId]);
+        return $this->getUrlBuilder()->getUrl('backend', ['section' => $sectionId]);
+    }
+
+    /**
+     * @param $collection
+     * @param array $options
+     * @return \Tmvc\Framework\View\View
+     * @throws \Tmvc\Framework\Exception\ArgumentMismatchException
+     * @throws \Tmvc\Framework\Exception\TmvcException
+     */
+    public function getNewListingWidget($collection, $options = [])
+    {
+        return $this->getContext()->getListingWidgetFactory()->create([
+            'collection'    =>  $collection,
+            'options'       =>  $options
+        ])->render();
     }
 }

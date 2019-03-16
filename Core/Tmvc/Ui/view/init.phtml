@@ -8,13 +8,11 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<link href="<?php echo $block->getUrlBuilder()->getPubUrl("Tmvc_Ui/lib/css/bootstrap/bootstrap.min.css") ?>" rel="stylesheet">
-
-<link href="<?php echo $block->getUrlBuilder()->getPubUrl("Tmvc_Ui/lib/css/font-awesome/all.min.css") ?>" rel="stylesheet" type="text/css">
-
-<link href="<?php echo $block->getUrlBuilder()->getPubUrl("Tmvc_Ui/lib/css/datatables/dataTables.bootstrap4.min.css") ?>" rel="stylesheet">
-
-    <link href="<?php echo $block->getUrlBuilder()->getPubUrl("Tmvc_Ui/lib/css/Toastr.min.css") ?>" rel="stylesheet">
+<link href="<?php echo $block->getUrlBuilder()->getPubUrl("Tmvc_Ui/lib/css/bootstrap/bootstrap.min.css") ?>" rel="stylesheet" type="text/css" />
+<link href="<?php echo $block->getUrlBuilder()->getPubUrl("Tmvc_Ui/lib/css/font-awesome/all.min.css") ?>" rel="stylesheet" type="text/css" />
+<link href="<?php echo $block->getUrlBuilder()->getPubUrl("Tmvc_Ui/lib/css/Toastr.min.css") ?>" rel="stylesheet" type="text/css" />
+    <link href="<?php echo $block->getUrlBuilder()->getPubUrl("Tmvc_Ui/lib/DataTables/datatables.min.css") ?>" rel="stylesheet" type="text/css" />
+    <link href="<?php echo 'http://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css' ?>" rel="stylesheet" type="text/css" />
 
 <script>
     var PUB_BASE_URL = "<?php echo $block->getUrlBuilder()->getPubUrl('') ?>";
@@ -26,12 +24,17 @@
             "jquery"        : "Tmvc_Ui/lib/js/jquery.min",
             "bootstrap"     : "Tmvc_Ui/lib/js/bootstrap.bundle.min",
             "chart"         : "Tmvc_Ui/lib/js/Chart",
-            "datatables"    : "Tmvc_Ui/lib/js/jquery/datatables/jquery.dataTables.min",
-            "toastr"        : "Tmvc_Ui/lib/js/Toastr"
+            "toastr"        : "Tmvc_Ui/lib/js/Toastr",
+            "datatables"    : "Tmvc_Ui/lib/DataTables/datatables.min"
         },
         "shim" : {
             "bootstrap" : ["jquery"],
-            "datatables": ["jquery", "Tmvc_Ui/lib/js/jquery/datatables/dataTables.bootstrap4.min"]
+            "datatables": ["jquery", "bootstrap"]
+        },
+        map: {
+            '*': {
+                'datatables.net': 'dataTables'
+            }
         }
     });
 </script>

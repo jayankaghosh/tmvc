@@ -80,9 +80,15 @@ class AttributeLoader
         }
     }
 
-    public function getAllAttributes(AbstractModel $model) {
+    /**
+     * @param AbstractModel $model
+     * @param bool $segregateToTypeSections
+     * @return string[]|Attribute[]
+     * @throws TmvcException
+     */
+    public function getAllAttributes(AbstractModel $model, $segregateToTypeSections = true) {
         $attributes = $this->fetchAttributes($model, null);
-        return $this->formAttributeTypeSections($attributes);
+        return $segregateToTypeSections ? $this->formAttributeTypeSections($attributes) : $attributes;
     }
 
 

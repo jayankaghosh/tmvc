@@ -82,7 +82,7 @@ abstract class AbstractCollection extends DataObject implements \IteratorAggrega
     }
 
     /**
-     * @param string $field
+     * @param string|string[] $field
      * @return $this
      */
     public function addFieldToSelect($field) {
@@ -184,6 +184,19 @@ abstract class AbstractCollection extends DataObject implements \IteratorAggrega
     {
         $this->load();
         return parent::getData($key, $default);
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $data = [];
+        foreach ($this->getData() as $item)
+        {
+            $data[] = $item->getData();
+        }
+        return $data;
     }
 
     /**

@@ -12,6 +12,7 @@ namespace Tmvc\Backend\Block;
 
 use Tmvc\Framework\DataObject;
 use Tmvc\Framework\Tools\Url;
+use Tmvc\Ui\Helper\UiHelper;
 
 class LoginForm extends DataObject
 {
@@ -19,16 +20,23 @@ class LoginForm extends DataObject
      * @var Url
      */
     private $url;
+    /**
+     * @var UiHelper
+     */
+    private $uiHelper;
 
     /**
      * LoginForm constructor.
      * @param Url $url
+     * @param UiHelper $uiHelper
      */
     public function __construct(
-        Url $url
+        Url $url,
+        UiHelper $uiHelper
     )
     {
         $this->url = $url;
+        $this->uiHelper = $uiHelper;
     }
 
     public function getPostUrl() {
@@ -37,5 +45,13 @@ class LoginForm extends DataObject
 
     public function getPubUrl($resource, $module = "Tmvc_Backend") {
         return $this->url->getPubUrl("$module/$resource");
+    }
+
+    /**
+     * @return UiHelper
+     */
+    public function getUiHelper(): UiHelper
+    {
+        return $this->uiHelper;
     }
 }

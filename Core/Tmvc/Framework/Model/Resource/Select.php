@@ -25,11 +25,15 @@ class Select extends Raw
     }
 
     /**
-     * @param string $field
+     * @param string|string[] $field
      * @return $this
      */
     public function addFieldToSelect($field) {
-        $this->fields[] = $field;
+        if (is_array($field)) {
+            $this->fields = $field;
+        } else {
+            $this->fields[] = $field;
+        }
         return $this;
     }
 
