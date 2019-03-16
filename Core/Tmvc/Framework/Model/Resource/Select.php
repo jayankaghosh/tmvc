@@ -115,4 +115,12 @@ class Select extends Raw
 
         return "SELECT ".$fields." FROM ".$this->tableName." WHERE (".$conditions.") ".$this->limit;
     }
+
+    /**
+     * @return array
+     */
+    public function getFields(): array
+    {
+        return $this->fields;
+    }
 }

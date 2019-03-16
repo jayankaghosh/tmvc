@@ -5,7 +5,7 @@ $data = $block->getCollection()->toArray();
 <table class="table" id="<?php echo $block->getWidgetId() ?>">
     <thead class="thead-light">
         <tr>
-            <?php foreach (array_keys(reset($data)) as $header): ?>
+            <?php foreach ($block->getCollection()->getSelect()->getFields() as $header): ?>
                 <th><?php echo $header ?></th>
             <?php endforeach; ?>
             <?php if ($block->getActions()): ?>
