@@ -75,15 +75,13 @@ class AbstractSection extends DataObject
     /**
      * @param $collection
      * @param array $options
-     * @return \Tmvc\Framework\View\View
-     * @throws \Tmvc\Framework\Exception\ArgumentMismatchException
-     * @throws \Tmvc\Framework\Exception\TmvcException
+     * @return \Tmvc\Ui\Block\Widget\Listing
      */
     public function getNewListingWidget($collection, $options = [])
     {
         return $this->getContext()->getListingWidgetFactory()->create([
             'collection'    =>  $collection,
             'options'       =>  $options
-        ])->render();
+        ]);
     }
 }

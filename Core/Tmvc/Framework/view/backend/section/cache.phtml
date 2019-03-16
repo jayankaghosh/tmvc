@@ -2,7 +2,7 @@
 /** @var \Tmvc\Framework\Cache\Block\Backend\Section\Cache $block */
 ?>
 <div class="card mb-3">
-    <form id="cache-management-form" method="post" action="<?php echo $block->getUrlBuilder()->getUrl('*/cache/clean') ?>">
+    <form id="cache-management-form" method="post" action="<?php echo $block->getUrlBuilder()->getUrl('backend/service', ['service' => 'tmvc_cache_clean']) ?>">
         <div class="card-header"><?php echo "Cache Management" ?></div>
         <div class="card-body">
             <?php echo $block->getCacheTreeHtml() ?>

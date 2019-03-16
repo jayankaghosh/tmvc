@@ -12,6 +12,7 @@ namespace Tmvc\Cms\Block\Backend\Sections\Page;
 
 use Tmvc\Backend\Block\Backend\Sections\AbstractSection;
 use Tmvc\Backend\Block\Backend\Sections\Context;
+use Tmvc\Cms\Block\Backend\Sections\Page\Listing\Renderer;
 use Tmvc\Cms\Model\Page\CollectionFactory as PageCollectionFactory;
 
 class Listing extends AbstractSection
@@ -20,21 +21,28 @@ class Listing extends AbstractSection
      * @var PageCollectionFactory
      */
     private $pageCollectionFactory;
+    /**
+     * @var Renderer
+     */
+    private $renderer;
 
     /**
      * Listing constructor.
      * @param Context $context
      * @param PageCollectionFactory $pageCollectionFactory
      * @param $currentSection
+     * @param Renderer $renderer
      */
     public function __construct(
         Context $context,
         PageCollectionFactory $pageCollectionFactory,
-        $currentSection
+        $currentSection,
+        Renderer $renderer
     )
     {
         parent::__construct($context, $currentSection);
         $this->pageCollectionFactory = $pageCollectionFactory;
+        $this->renderer = $renderer;
     }
 
     public function loadWidget()
@@ -46,6 +54,17 @@ class Listing extends AbstractSection
                 'response_code',
                 'is_enabled'
             ])
-        );
+        )->setRenderer(
+            $this->renderer
+        )->setActions([
+            [
+                'label'     =>  "Edit",
+                'section'   =>  "cms-page-addedit"
+            ],
+            [
+                'label'     =>  "Delete",
+                'service'   =>  "cms_page_delete"
+            ]
+        ]);
     }
 }

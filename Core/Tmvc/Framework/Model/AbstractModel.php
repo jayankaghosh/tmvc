@@ -272,4 +272,12 @@ abstract class AbstractModel extends DataObject
     {
         return $this->context;
     }
+
+    /**
+     * @return string
+     */
+    public function getIdFieldName(): string
+    {
+        return $this->indexField;
+    }
 }

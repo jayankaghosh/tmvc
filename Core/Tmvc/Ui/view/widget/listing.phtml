@@ -8,14 +8,32 @@ $data = $block->getCollection()->toArray();
             <?php foreach (array_keys(reset($data)) as $header): ?>
                 <th><?php echo $header ?></th>
             <?php endforeach; ?>
+            <?php if ($block->getActions()): ?>
+                <th>Actions</th>
+            <?php endif; ?>
         </tr>
     </thead>
     <tbody>
         <?php foreach ($data as $row): ?>
             <tr>
-                <?php foreach ($row as $cellName => $cellData): ?>
-                    <td><?php echo $block->renderCell($cellName, $cellData) ?></td>
+                <?php $row = $block->renderRow($row); ?>
+                <?php foreach ($row as $cellData): ?>
+                    <td><?php echo $cellData ?></td>
                 <?php endforeach; ?>
+                <?php if ($block->getActions()): ?>
+                    <td>
+                        <div class="dropdown btn-group">
+                            <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="#">
+                                Action <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                            <?php foreach ($block->getActions() as $action): ?>
+                                <li>
+                                    <a class="btn btn-link" href="<?php echo $block->getSectionOrServiceUrl($action, $row) ?>"><?php echo $action['label'] ?></a>
+                                </li>
+                            <?php endforeach; ?>
+                    </td>
+                <?php endif; ?>
             </tr>
         <?php endforeach; ?>
     </tbody>

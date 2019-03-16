@@ -9,3 +9,4 @@ $config->addObserver('view_render_after', \Tmvc\Cms\Observer\ViewRenderAfter::cl
 /** @var \Tmvc\Backend\Service\ServicePool $servicePool */
 $servicePool = $config->getInstance(\Tmvc\Backend\Service\ServicePool::class);
 $servicePool->addService('cms_page_save', \Tmvc\Cms\Model\Backend\Service\CmsPageSave::class);
+$servicePool->addService('cms_page_delete', \Tmvc\Cms\Model\Backend\Service\CmsPageDelete::class);
